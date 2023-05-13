@@ -12,5 +12,4 @@ pub struct ContractPayment {
      * The amount of credits received when the contract is fulfilled.
      */
     pub onFulfilled: i64,
-  }
-  
+}

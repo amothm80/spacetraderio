@@ -1,16 +1,15 @@
-
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 
-pub struct Data{
+pub struct Data {
     pub data: MarketTransaction,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum MarketTransactionType{
+pub enum MarketTransactionType {
     #[default]
     PURCHASE,
     SELL,
@@ -34,6 +33,7 @@ pub struct MarketTransaction {
     /**
      * The type of transaction.
      */
+    #[serde(rename = "type")]
     pub type_field: MarketTransactionType,
     /**
      * The number of units of the transaction.
@@ -51,5 +51,4 @@ pub struct MarketTransaction {
      * The timestamp of the transaction.
      */
     pub timestamp: String,
-  }
-  
+}

@@ -4,19 +4,18 @@ use serde_derive::Serialize;
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 
-pub struct Data{
+pub struct Data {
     pub data: MarketTradeGood,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum MarketTradeGoodSupply{
+pub enum MarketTradeGoodSupply {
     SCARCE,
     LIMITED,
     #[default]
     MODERATE,
     ABUNDANT,
 }
-
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -41,5 +40,4 @@ pub struct MarketTradeGood {
      * The price at which this good can be sold to the market.
      */
     pub sellPrice: i64,
-  }
-  
+}

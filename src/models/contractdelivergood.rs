@@ -3,7 +3,7 @@ use serde_derive::Serialize;
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 
-pub struct Data{
+pub struct Data {
     pub data: ContractDeliverGood,
 }
 /**
@@ -28,5 +28,4 @@ pub struct ContractDeliverGood {
      * The number of units fulfilled on this contract.
      */
     pub unitsFulfilled: i64,
-  }
-  
+}

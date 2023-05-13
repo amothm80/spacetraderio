@@ -1,12 +1,13 @@
+use crate::models::markettradegood;
+use crate::models::markettransaction;
+use crate::models::tradegood;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-use crate::models::markettradegood;
-use crate::models::markettransaction
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 
-pub struct Data{
+pub struct Data {
     pub data: Market,
 }
 
@@ -20,15 +21,15 @@ pub struct Market {
     /**
      * The list of goods that are exported from this market.
      */
-    pub exports: Vec<tradegood>,
+    pub exports: Vec<tradegood::TradeGood>,
     /**
      * The list of goods that are sought as imports in this market.
      */
-    pub imports: Vec<tradegood>,
+    pub imports: Vec<tradegood::TradeGood>,
     /**
      * The list of goods that are bought and sold between agents at this market.
      */
-    pub exchange: Vec<tradegood>,
+    pub exchange: Vec<tradegood::TradeGood>,
     /**
      * The list of recent transactions at this market. Visible only when a ship is present at the market.
      */
@@ -37,5 +38,4 @@ pub struct Market {
      * The list of goods that are traded at this market. Visible only when a ship is present at the market.
      */
     pub tradeGoods: Vec<markettradegood::MarketTradeGood>,
-  }
-  
+}

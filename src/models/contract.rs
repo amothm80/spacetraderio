@@ -1,14 +1,14 @@
+use crate::models::contractterms;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-use crate::models::contractterms;
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Data{
+pub struct Data {
     pub data: Contract,
 }
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub enum ContractType{
+pub enum ContractType {
     #[default]
     PROCUREMENT,
     TRANSPORT,
@@ -38,5 +38,4 @@ pub struct Contract {
      * The time at which the contract expires
      */
     pub expiration: String,
-  }
-  
+}

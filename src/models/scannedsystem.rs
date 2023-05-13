@@ -1,3 +1,4 @@
+use crate::models::systemtype;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
@@ -5,15 +6,20 @@ use serde_derive::Serialize;
 #[serde(rename_all = "camelCase")]
 
 pub struct Data {
-    pub data: ExtractionYield,
+    pub data: ScannedSystem,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ExtractionYield {
+pub struct ScannedSystem {
     pub symbol: String,
+    pub sectorSymbol: String,
     /**
-     * The number of units extracted that were placed into the ship's cargo hold.
+     * The type of waypoint.
      */
-    pub units: i64,
+    #[serde(rename = "type")]
+    pub type_field: systemtype::SystemType,
+    pub x: i64,
+    pub y: i64,
+    pub distance: i64,
 }

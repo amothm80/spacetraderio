@@ -4,7 +4,7 @@ use serde_derive::Serialize;
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 
-pub struct Data{
+pub struct Data {
     pub data: Chart,
 }
 
@@ -17,5 +17,4 @@ pub struct Chart {
     pub waypointSymbol: String,
     pub submittedBy: String,
     pub submittedOn: String,
-  }
-  
+}

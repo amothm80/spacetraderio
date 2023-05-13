@@ -1,17 +1,16 @@
-
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 
-pub struct Data{
+pub struct Data {
     pub data: FactionTrait,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
-pub enum FactionTraitSymbol{
+pub enum FactionTraitSymbol {
     #[default]
     BUREAUCRATIC,
     SECRETIVE,
@@ -81,7 +80,7 @@ pub struct FactionTrait {
      * The unique identifier of the trait.
      */
     pub symbol: FactionTraitSymbol,
-     
+
     /**
      * The name of the trait.
      */
@@ -90,5 +89,4 @@ pub struct FactionTrait {
      * A description of the trait.
      */
     pub description: String,
-  }
-  
+}

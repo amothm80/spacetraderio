@@ -1,27 +1,29 @@
-use crate::models::connectedsystem;
+use crate::models::shiprole;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-
 pub struct Data {
-    pub data: JumpGate,
+    pub data: ShipRegistration,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct JumpGate {
+/**
+ * The public registration information of the ship
+ */
+pub struct ShipRegistration {
     /**
-     * The maximum jump range of the gate.
+     * The agent's registered name of the ship
      */
-    pub jumpRange: i64,
+    pub name: String,
     /**
-     * The symbol of the faction that owns the gate.
+     * The symbol of the faction the ship is registered with
      */
     pub factionSymbol: String,
     /**
-     * The systems within range of the gate that have a corresponding gate.
+     * The registered role of the ship
      */
-    pub connectedSystems: Vec<connectedsystem::ConntectedSystem>,
+    pub role: shiprole::ShipRole,
 }

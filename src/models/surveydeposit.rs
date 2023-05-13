@@ -3,17 +3,18 @@ use serde_derive::Serialize;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-
 pub struct Data {
-    pub data: ExtractionYield,
+    pub data: SurveyDeposit,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ExtractionYield {
-    pub symbol: String,
+/**
+ * A surveyed deposit of a mineral or resource available for extraction.
+ */
+pub struct SurveyDeposit {
     /**
-     * The number of units extracted that were placed into the ship's cargo hold.
+     * The symbol of the deposit.
      */
-    pub units: i64,
+    pub symbol: String,
 }

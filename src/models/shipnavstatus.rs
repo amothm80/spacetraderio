@@ -3,17 +3,18 @@ use serde_derive::Serialize;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-
 pub struct Data {
-    pub data: ExtractionYield,
+    pub data: ShipNavStatus,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct ExtractionYield {
-    pub symbol: String,
-    /**
-     * The number of units extracted that were placed into the ship's cargo hold.
-     */
-    pub units: i64,
+#[allow(non_camel_case_types)]
+/**
+ * The current status of the ship
+ */
+pub enum ShipNavStatus {
+    #[default]
+    IN_TRANSIT,
+    IN_ORBIT,
+    DOCKED,
 }

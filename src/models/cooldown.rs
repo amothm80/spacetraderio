@@ -1,11 +1,10 @@
-
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 
-pub struct Data{
+pub struct Data {
     pub data: Cooldown,
 }
 
@@ -31,5 +30,4 @@ pub struct Cooldown {
      * The date and time when the cooldown expires in ISO 8601 format
      */
     pub expiration: String,
-  }
-  
+}
