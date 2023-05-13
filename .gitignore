@@ -1,2 +1,4 @@
 /target
 token.txt
+**/*.rs.bk
+Cargo.lock
