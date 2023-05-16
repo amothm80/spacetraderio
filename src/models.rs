@@ -14,6 +14,7 @@ pub mod jumpgate;
 pub mod market;
 pub mod markettradegood;
 pub mod markettransaction;
+pub mod message;
 pub mod meta;
 pub mod scannedship;
 pub mod scannedsystem;
