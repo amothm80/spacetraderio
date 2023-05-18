@@ -2,8 +2,9 @@ use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-
+//#[serde(rename_all = "camelCase")]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct Data {
     pub data: Cooldown,
 }
@@ -12,7 +13,9 @@ pub struct Data {
  * A cooldown is a period of time in which a ship cannot perform certain actions.
  */
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+//#[serde(rename_all = "camelCase")]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct Cooldown {
     /**
      * The symbol of the ship that is on cooldown

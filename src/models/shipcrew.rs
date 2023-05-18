@@ -2,12 +2,16 @@ use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+//#[serde(rename_all = "camelCase")]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct Data {
     pub data: ShipCrew,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum ShipCrewRotation {
     STRICT,
     #[default]
@@ -15,7 +19,9 @@ pub enum ShipCrewRotation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+//#[serde(rename_all = "camelCase")]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 /**
  * The ship's crew service and maintain the ship's systems and equipment.
  */

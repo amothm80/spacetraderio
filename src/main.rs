@@ -1,9 +1,10 @@
 pub mod apis;
 pub mod models;
 
-use apis::config;
+use apis::config::Config;
 use apis::myagent;
-use models::agent;
+use apis::factions;
+use models::agent::Agent;
 use serde::Deserialize;
 use serde_json::Value;
 use std::collections::HashMap;
@@ -17,15 +18,12 @@ const ST_API_AGENT: &str = "/my/agent";
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let token = fs::read_to_string("token.txt")?;
-    let mut conf = config::Config::new();
+    let mut conf = Config::new();
     conf.bearer_token = String::from(token);
-    let mut agent:models::agent::Agent = agent::Agent { accountId: String::from(""), symbol: String::from(""), headquarters: String::from(""), credits: 0 };
-    //println!("{:#?}", myagent::get_my_agent(&conf).await?);
-    match myagent::get_my_agent(&conf).await{
-        Ok(a) => agent = a,
-        Err(e) => handle_errors(e),
-    }
-    println!("{:#?}", agent);
+    //println!("{:#?}",myagent::get_my_agent(&conf).await);
+    //println!("{:#?}",factions::get_factions(&conf).await);
+    //println!("{:#?}",factions::get_faction(&conf,String::from("CORSAIRS")).await);
+    println!("{:#?}",myagent::get_my_contracts(&conf).await);
     Ok(())
 }
 

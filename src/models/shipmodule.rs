@@ -3,13 +3,16 @@ use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+//#[serde(rename_all = "camelCase")]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct Data {
     pub data: ShipModule,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum ShipModuleSymbol {
     #[default]
     MODULE_MINERAL_PROCESSOR_I,
@@ -32,7 +35,9 @@ pub enum ShipModuleSymbol {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+//#[serde(rename_all = "camelCase")]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 /**
  * A module can be installed in a ship and provides a set of capabilities such as storage space or quarters for crew. Module installations are permanent.
  */

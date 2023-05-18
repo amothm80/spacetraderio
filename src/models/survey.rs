@@ -3,12 +3,16 @@ use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+//#[serde(rename_all = "camelCase")]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct Data {
     pub data: Survey,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum SurveySize {
     #[default]
     SMALL,
@@ -17,7 +21,9 @@ pub enum SurveySize {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+//#[serde(rename_all = "camelCase")]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 /**
  * A resource survey of a waypoint, detailing a specific extraction location and the types of resources that can be found there.
  */

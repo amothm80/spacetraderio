@@ -1,8 +1,5 @@
 use crate::models::message::ErrorContent as APIError;
 use reqwest::Error as RError;
-use serde::Serializer;
-use serde_derive::Deserialize;
-use serde_derive::Serialize;
 use serde_json::Error as SJError;
 use std::error;
 use std::error::Error;

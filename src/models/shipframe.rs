@@ -4,13 +4,16 @@ use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+//#[serde(rename_all = "camelCase")]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct Data {
     pub data: ShipFrame,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum ShipFrameSymbol {
     #[default]
     FRAME_PROBE,
@@ -31,7 +34,9 @@ pub enum ShipFrameSymbol {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+//#[serde(rename_all = "camelCase")]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 /**
  * The frame of the ship. The frame determines the i64, of modules and mounting points of the ship, as well as base fuel capacity. As the condition of the frame takes more wear, the ship will become more sluggish and less maneuverable.
  */
