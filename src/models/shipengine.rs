@@ -3,13 +3,6 @@ use crate::models::shiprequirements;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-//#[serde(rename_all = "camelCase")]
-#[allow(non_camel_case_types)]
-#[allow(non_snake_case)]
-pub struct Data {
-    pub data: ShipEngine,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
@@ -18,6 +11,7 @@ pub enum ShipEngineSymbol {
     #[default]
     ENGINE_IMPULSE_DRIVE_I,
     ENGINE_ION_DRIVE_I,
+    #[serde(rename = "ENGINE_ION_DRIVE_II")]
     ENGINE_ION_DRIVE_II,
     ENGINE_HYPER_DRIVE_I,
 }
@@ -36,6 +30,7 @@ pub struct ShipEngine {
     /**
      * Condition is a range of 0 to 100 where 0 is completely worn out and 100 is brand new.
      */
+    #[serde(default)]
     pub condition: shipcondition::ShipCondition,
     pub speed: i64,
     /**

@@ -7,14 +7,6 @@ use serde_derive::Serialize;
 //#[serde(rename_all = "camelCase")]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct Data {
-    pub data: ScannedShip,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-//#[serde(rename_all = "camelCase")]
-#[allow(non_camel_case_types)]
-#[allow(non_snake_case)]
 pub struct ScannedShipFrame {
     symbol: String,
 }
@@ -63,14 +55,17 @@ pub struct ScannedShip {
     /**
      * The frame of the ship.
      */
+    #[serde(default)]
     pub frame: ScannedShipFrame,
     /**
      * The reactor of the ship.
      */
+    #[serde(default)]
     pub reactor: ScannedShipReactor,
     /**
      * The engine of the ship.
      */
     pub engine: ScannedShipEngine,
+    #[serde(default)]
     pub mounts: Vec<ScannedShipMount>,
 }

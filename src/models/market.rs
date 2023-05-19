@@ -4,13 +4,6 @@ use crate::models::tradegood;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-//#[serde(rename_all = "camelCase")]
-#[allow(non_camel_case_types)]
-#[allow(non_snake_case)]
-pub struct Data {
-    pub data: Market,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 //#[serde(rename_all = "camelCase")]
@@ -36,9 +29,11 @@ pub struct Market {
     /**
      * The list of recent transactions at this market. Visible only when a ship is present at the market.
      */
+    #[serde(default)]
     pub transactions: Vec<markettransaction::MarketTransaction>,
     /**
      * The list of goods that are traded at this market. Visible only when a ship is present at the market.
      */
+    #[serde(default)]
     pub tradeGoods: Vec<markettradegood::MarketTradeGood>,
 }

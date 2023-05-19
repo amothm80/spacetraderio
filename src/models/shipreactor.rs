@@ -3,13 +3,6 @@ use crate::models::shiprequirements;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-//#[serde(rename_all = "camelCase")]
-#[allow(non_camel_case_types)]
-#[allow(non_snake_case)]
-pub struct Data {
-    pub data: ShipReactor,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
@@ -18,6 +11,7 @@ pub enum ShipReactorSymbol {
     #[default]
     REACTOR_SOLAR_I,
     REACTOR_FUSION_I,
+    #[serde(rename = "REACTOR_FISSION_I")]
     REACTOR_FISSION_I,
     REACTOR_CHEMICAL_I,
     REACTOR_ANTIMATTER_I,
@@ -38,6 +32,7 @@ pub struct ShipReactor {
     /**
      * Condition is a range of 0 to 100 where 0 is completely worn out and 100 is brand new.
      */
+    #[serde(default)]
     pub condition: shipcondition::ShipCondition,
     pub powerOutput: i64,
     /**

@@ -2,11 +2,12 @@ use crate::models::message::ErrorContent as APIError;
 use reqwest::Error as RError;
 use serde_json::Error as SJError;
 use std::error;
-use std::error::Error;
-use std::fmt::{self, write};
+use std::fmt;
 
 //#[derive(Debug, Serialize, Deserialize)]
 #[derive(Debug)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum STError {
     reqwesterror(RError),
     serdejerror(SJError),

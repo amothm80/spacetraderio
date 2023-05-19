@@ -1,4 +1,6 @@
 pub mod config;
 pub mod errors;
-pub mod myagent;
 pub mod factions;
+pub mod agent;
+pub mod ships;
+pub mod systems;

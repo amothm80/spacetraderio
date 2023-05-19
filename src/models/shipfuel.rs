@@ -1,13 +1,6 @@
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-//#[serde(rename_all = "camelCase")]
-#[allow(non_camel_case_types)]
-#[allow(non_snake_case)]
-pub struct Data {
-    pub data: ShipFuel,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 //#[serde(rename_all = "camelCase")]
@@ -25,6 +18,7 @@ pub struct ShipFuel {
      * The maximum amount of fuel the ship's tanks can hold.
      */
     pub capacity: i64,
+    #[serde(default)]
     pub consumed: ShipFuelConsumed,
 }
 
@@ -38,5 +32,5 @@ pub struct ShipFuelConsumed {
     /**
      * The time at which the fuel was consumed.
      */
-    pub timestamp: i64,
+    pub timestamp: String,
 }

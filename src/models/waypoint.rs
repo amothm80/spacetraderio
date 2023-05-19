@@ -6,13 +6,6 @@ use crate::models::waypointtype;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-//#[serde(rename_all = "camelCase")]
-#[allow(non_camel_case_types)]
-#[allow(non_snake_case)]
-pub struct Data {
-    pub data: Waypoint,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 //#[serde(rename_all = "camelCase")]
@@ -32,6 +25,7 @@ pub struct Waypoint {
     x: i64,
     y: i64,
     orbitals: Vec<waypointorbital::WaypointOrbital>,
+    #[serde(default)]
     faction: waypointfaction::WaypointFaction,
     /**
      * The traits of the waypoint.
@@ -40,5 +34,6 @@ pub struct Waypoint {
     /**
      * The chart of a system or waypoint, which makes the location visible to other agents.
      */
+    #[serde(default)]
     chart: chart::Chart,
 }

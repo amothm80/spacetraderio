@@ -3,13 +3,6 @@ use crate::models::shiprequirements;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-//#[serde(rename_all = "camelCase")]
-#[allow(non_camel_case_types)]
-#[allow(non_snake_case)]
-pub struct Data {
-    pub data: ShipFrame,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
@@ -21,6 +14,7 @@ pub enum ShipFrameSymbol {
     FRAME_INTERCEPTOR,
     FRAME_RACER,
     FRAME_FIGHTER,
+    #[serde(rename = "FRAME_FRIGATE")]
     FRAME_FRIGATE,
     FRAME_SHUTTLE,
     FRAME_EXPLORER,
@@ -47,6 +41,7 @@ pub struct ShipFrame {
     /**
      * Condition is a range of 0 to 100 where 0 is completely worn out and 100 is brand new.
      */
+    #[serde(default)]
     pub condition: shipcondition::ShipCondition,
     pub moduleSlots: i64,
     pub mountingPoints: i64,

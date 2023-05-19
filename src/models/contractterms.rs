@@ -13,5 +13,6 @@ pub struct ContractTerms {
      */
     pub deadline: String,
     pub payment: contractpayment::ContractPayment,
+    #[serde(default)]
     pub deliver: Vec<contractdelivergood::ContractDeliverGood>,
 }

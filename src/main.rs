@@ -2,37 +2,39 @@ pub mod apis;
 pub mod models;
 
 use apis::config::Config;
-use apis::myagent;
-use apis::factions;
-use models::agent::Agent;
-use serde::Deserialize;
-use serde_json::Value;
-use std::collections::HashMap;
-use std::fs;
 use apis::errors;
-
-use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION, CONTENT_LENGTH, CONTENT_TYPE, HOST};
-const ST_API_URL: &str = "https://api.spacetraders.io/v2";
-const ST_API_AGENT: &str = "/my/agent";
+use apis::agent;
+use apis::ships;
+use apis::factions;
+use apis::systems;
+use std::fs;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let token = fs::read_to_string("token.txt")?;
     let mut conf = Config::new();
     conf.bearer_token = String::from(token);
-    //println!("{:#?}",myagent::get_my_agent(&conf).await);
+    //println!("{:#?}",agent::get_my_agent(&conf).await);
     //println!("{:#?}",factions::get_factions(&conf).await);
     //println!("{:#?}",factions::get_faction(&conf,String::from("CORSAIRS")).await);
-    println!("{:#?}",myagent::get_my_contracts(&conf).await);
+    //println!("{:#?}",agent::get_my_contracts(&conf).await);
+    //println!("{}", agent::get_contract(&conf, String::from("clhmdeetx02v5s60db5upt1mt")).await.unwrap() );
+    //println!("{:#?}",agent::accept_contract(&conf, String::from("clhmdeetx02v5s60db5upt1mt")).await);
+    //println!("{:#?}",agent::fulfill_contract(&conf, String::from("clhmdeetx02v5s60db5upt1mt")).await);
+    //println!("{:#?}",ships::get_my_ships(&conf).await);
+    //println!("{:#?}",systems::get_systems(&conf).await);
+    //println!("{:#?}",systems::get_system_waypoints(&conf, String::from("X1-ZA40")).await);
+    println!("{:#?}",systems::get_system_waypoint(&conf, String::from("X1-JJ48"), String::from("X1-JJ48-87750D")).await);
+    
     Ok(())
 }
 
-fn handle_errors(e:errors::STError){
-    match e{
-        errors::STError::reqwesterror(e) => println!("{}",e),
-        errors::STError::serdejerror(e) => println!("{}",e),
-        errors::STError::stapierror(e) => println!("{}",e),
-        errors::STError::stgeneralerror => println!("{}",e),
+fn handle_errors(e: errors::STError) {
+    match e {
+        errors::STError::reqwesterror(e) => println!("{}", e),
+        errors::STError::serdejerror(e) => println!("{}", e),
+        errors::STError::stapierror(e) => println!("{}", e),
+        errors::STError::stgeneralerror => println!("{}", e),
     }
 }
 

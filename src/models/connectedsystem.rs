@@ -6,14 +6,6 @@ use serde_derive::Serialize;
 //#[serde(rename_all = "camelCase")]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct Data {
-    pub data: ConntectedSystem,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-//#[serde(rename_all = "camelCase")]
-#[allow(non_camel_case_types)]
-#[allow(non_snake_case)]
 pub struct ConntectedSystem {
     pub symbol: String,
     pub sectorSymbol: String,
@@ -25,6 +17,7 @@ pub struct ConntectedSystem {
     /**
      * The symbol of the faction that owns the connected jump gate in the system.
      */
+    #[serde(default)]
     pub factionSymbol: String,
     pub x: i64,
     pub y: i64,

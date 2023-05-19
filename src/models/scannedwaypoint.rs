@@ -10,14 +10,6 @@ use serde_derive::Serialize;
 //#[serde(rename_all = "camelCase")]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct Data {
-    pub data: ScannedWaypoint,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-//#[serde(rename_all = "camelCase")]
-#[allow(non_camel_case_types)]
-#[allow(non_snake_case)]
 /**
  * A waypoint is a location that ships can travel to such as a Planet, Moon or Space Station.
  */
@@ -32,6 +24,7 @@ pub struct ScannedWaypoint {
     pub x: i64,
     pub y: i64,
     pub orbitals: Vec<waypointorbital::WaypointOrbital>,
+    #[serde(default)]
     pub faction: waypointfaction::WaypointFaction,
     /**
      * The traits of the waypoint.
@@ -40,5 +33,6 @@ pub struct ScannedWaypoint {
     /**
      * The chart of a system or waypoint, which makes the location visible to other agents.
      */
+    #[serde(default)]
     pub chart: chart::Chart,
 }

@@ -2,13 +2,6 @@ use crate::models::shiprequirements;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-//#[serde(rename_all = "camelCase")]
-#[allow(non_camel_case_types)]
-#[allow(non_snake_case)]
-pub struct Data {
-    pub data: ShipMount,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
@@ -63,9 +56,12 @@ pub enum ShipMountDeposit {
 pub struct ShipMount {
     pub symbol: ShipMountSymbol,
     pub name: String,
+    #[serde(default)]
     pub description: String,
+    #[serde(default)]
     pub strength: i64,
-    pub deposits: ShipMountDeposit,
+    #[serde(default)]
+    pub deposits: Vec<ShipMountDeposit>,
     /*** The requirements for installation on a ship  */
     pub requirements: shiprequirements::ShipRequirements,
 }
