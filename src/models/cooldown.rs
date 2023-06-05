@@ -1,3 +1,5 @@
+use std::fmt;
+
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
@@ -25,4 +27,14 @@ pub struct Cooldown {
      * The date and time when the cooldown expires in ISO 8601 format
      */
     pub expiration: String,
+}
+
+impl fmt::Display for Cooldown {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Cooldown:\nShip Symbol: {}\nTime: {} out of {} remaining\nCooldown Expiration: {}",
+            self.shipSymbol, self.remainingSeconds, self.totalSeconds, self.expiration
+        )
+    }
 }

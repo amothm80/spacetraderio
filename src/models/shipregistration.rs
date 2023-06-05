@@ -1,7 +1,8 @@
+use std::fmt;
+
 use crate::models::shiprole;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 //#[serde(rename_all = "camelCase")]
@@ -23,4 +24,14 @@ pub struct ShipRegistration {
      * The registered role of the ship
      */
     pub role: shiprole::ShipRole,
+}
+
+impl fmt::Display for ShipRegistration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}({:?}): {:?}",
+            self.name, self.factionSymbol, self.role
+        )
+    }
 }

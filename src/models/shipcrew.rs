@@ -1,3 +1,5 @@
+use std::fmt;
+
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
@@ -43,4 +45,14 @@ pub struct ShipCrew {
      * The amount of credits per crew member paid per hour. Wages are paid when a ship docks at a civilized waypoint.
      */
     pub wages: i64,
+}
+
+impl fmt::Display for ShipCrew {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Current Crew: {}\nRequired Crew: {}\nCrew Capacity: {}\nCrew Rotation: {:?}\nCrew Morale:{}\nCrew Wages:{}\n",
+            self.current, self.required, self.capacity, self.rotation, self.morale, self.wages
+        )
+    }
 }

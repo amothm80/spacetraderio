@@ -183,6 +183,41 @@ pub struct MessageWaypoints {
     pub error: ErrorContent,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageMarket {
+    #[serde(default)]
+    pub data: market::Market,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipyard {
+    #[serde(default)]
+    pub data: shipyard::Shipyard,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageJumpgate {
+    #[serde(default)]
+    pub data: jumpgate::JumpGate,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
 // #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 // //#[serde(untagged)]
 // //#[allow(non_camel_case_types)]

@@ -1,6 +1,7 @@
+use std::fmt;
+
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 //#[serde(rename_all = "camelCase")]
@@ -26,4 +27,10 @@ pub struct ShipCargoItem {
      * The number of units of the cargo item.
      */
     pub units: i64,
+}
+
+impl fmt::Display for ShipCargoItem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{} units of {}({})", self.units, self.name, self.symbol)
+    }
 }

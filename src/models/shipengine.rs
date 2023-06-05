@@ -1,8 +1,9 @@
+use std::fmt;
+
 use crate::models::shipcondition;
 use crate::models::shiprequirements;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
@@ -37,4 +38,14 @@ pub struct ShipEngine {
      * The requirements for installation on a ship
      */
     pub requirements: shiprequirements::ShipRequirements,
+}
+
+impl fmt::Display for ShipEngine {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}({:?})\nCondition: {}\nSpeed: {}\nRequirements: {}",
+            self.name, self.symbol, self.condition, self.speed, self.requirements
+        )
+    }
 }

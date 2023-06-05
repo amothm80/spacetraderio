@@ -1,3 +1,5 @@
+use std::fmt;
+
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
@@ -24,4 +26,14 @@ pub struct ShipRequirements {
      */
     #[serde(default)]
     pub slots: i64,
+}
+
+impl fmt::Display for ShipRequirements {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "POWER: {} - CREW: {} - SLOTS: {}",
+            self.power, self.crew, self.slots
+        )
+    }
 }

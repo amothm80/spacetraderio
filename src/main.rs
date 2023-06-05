@@ -1,31 +1,80 @@
 pub mod apis;
 pub mod models;
 
+use apis::agent;
 use apis::config::Config;
 use apis::errors;
-use apis::agent;
-use apis::ships;
 use apis::factions;
+use apis::ships;
 use apis::systems;
+use std::env;
 use std::fs;
+use std::io;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    let args: Vec<String> = env::args().collect();
     let token = fs::read_to_string("token.txt")?;
     let mut conf = Config::new();
-    conf.bearer_token = String::from(token);
-    //println!("{:#?}",agent::get_my_agent(&conf).await);
-    //println!("{:#?}",factions::get_factions(&conf).await);
-    //println!("{:#?}",factions::get_faction(&conf,String::from("CORSAIRS")).await);
-    //println!("{:#?}",agent::get_my_contracts(&conf).await);
-    //println!("{}", agent::get_contract(&conf, String::from("clhmdeetx02v5s60db5upt1mt")).await.unwrap() );
-    //println!("{:#?}",agent::accept_contract(&conf, String::from("clhmdeetx02v5s60db5upt1mt")).await);
-    //println!("{:#?}",agent::fulfill_contract(&conf, String::from("clhmdeetx02v5s60db5upt1mt")).await);
-    //println!("{:#?}",ships::get_my_ships(&conf).await);
+    conf.bearer_token = token;
+    //let agent = agent::get_my_agent(&conf).await;
+    //let mut contracts: Vec<models::contract::Contract> = vec![];
+    match args[1].as_str() {
+        "agent" => println!("{}", agent::get_my_agent(&conf).await?),
+        "faction" => match args[2].as_str() {
+            "all" => {
+                let factions = factions::get_factions(&conf).await?;
+                for faction in factions {
+                    println!("{}\n", faction);
+                }
+            }
+            _ => println!(
+                "{}",
+                factions::get_faction(&conf, args[2].to_owned()).await?
+            ),
+        },
+        "contract" => match args[2].as_str() {
+            "all" => {
+                let contracts = agent::get_my_contracts(&conf).await?;
+                for contract in contracts {
+                    println!("{}\n", contract);
+                }
+            }
+            "accept" => {
+                println!(
+                    "{}\nACCEPTED",
+                    agent::accept_contract(&conf, args[3].to_owned()).await?
+                )
+            }
+            // match agent::accept_contract(&conf, args[3].to_owned()).await {
+            //     Ok(s) => println!("{}\nACCEPTED", s),
+            //     Err(s) => handle_errors(s),
+            // },
+            "fulfill" => {
+                println!(
+                    "{}\nFULILLED",
+                    agent::fulfill_contract(&conf, args[3].to_owned()).await?
+                );
+            }
+            _ => {
+                println!("{}", agent::get_contract(&conf, args[2].to_owned()).await?)
+            }
+        },
+        "ships" => {
+            let ships = ships::get_my_ships(&conf).await?;
+            for ship in ships {
+                println!("{}\n\n", ship);
+            }
+        }
+        _ => println!("invalid argument"),
+    }
     //println!("{:#?}",systems::get_systems(&conf).await);
     //println!("{:#?}",systems::get_system_waypoints(&conf, String::from("X1-ZA40")).await);
-    println!("{:#?}",systems::get_system_waypoint(&conf, String::from("X1-JJ48"), String::from("X1-JJ48-87750D")).await);
-    
+    //println!("{:#?}",systems::get_system_waypoint(&conf, String::from("X1-ZA40"), String::from("X1-ZA40-41138D")).await);
+    //println!("{:#?}",systems::get_waypoint_market(&conf, String::from("X1-ZA40"), String::from("X1-ZA40-41138D")).await);
+    //println!("{:#?}",systems::get_waypoint_shipyard(&conf, String::from("X1-ZA40"), String::from("X1-ZA40-41138D")).await);
+    //println!("{:#?}",systems::get_waypoint_jumpgate(&conf, String::from("X1-ZA40"), String::from("X1-ZA40-41138D")).await);
+
     Ok(())
 }
 

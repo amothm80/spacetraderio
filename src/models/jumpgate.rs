@@ -1,7 +1,8 @@
+use std::fmt;
+
 use crate::models::connectedsystem;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 //#[serde(rename_all = "camelCase")]
@@ -21,4 +22,17 @@ pub struct JumpGate {
      * The systems within range of the gate that have a corresponding gate.
      */
     pub connectedSystems: Vec<connectedsystem::ConntectedSystem>,
+}
+
+impl fmt::Display for JumpGate {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Jump Gate Information:\nJump Range: {}\nFaction Symbol: {}\n{:?}",
+            self.jumpRange,
+            self.factionSymbol,
+            self.connectedSystems,
+            //self.connectedSystems.iter().flatten()
+        )
+    }
 }

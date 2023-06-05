@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::models::shipnavroutewaypoint;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
@@ -26,4 +28,14 @@ pub struct ShipNavRoute {
      * The date time of the ship's arrival. If the ship is in-transit, this is the expected time of arrival.
      */
     pub arrival: String,
+}
+
+impl fmt::Display for ShipNavRoute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Destination: {}\nDeparture: {}\nDeparture Time: {}\nArrival Time: {}\n",
+            self.destination, self.departure, self.departureTime, self.arrival
+        )
+    }
 }

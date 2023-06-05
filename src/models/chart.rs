@@ -1,4 +1,5 @@
 use std::default;
+use std::fmt;
 
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
@@ -17,4 +18,14 @@ pub struct Chart {
     pub submittedBy: String,
     #[serde(default)]
     pub submittedOn: String,
+}
+
+impl fmt::Display for Chart {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Chart Information:\nWaypoint: {}\nSubmitted By: {}\nSubmitted On: {}\n",
+            self.waypointSymbol, self.submittedBy, self.submittedOn
+        )
+    }
 }

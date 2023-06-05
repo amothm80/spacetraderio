@@ -14,6 +14,7 @@ url = "^2.2"
 uuid = { version = "^1.0", features = ["serde"] }
 tokio = { version = "1.28.1", features = ["full"] }
 serde_path_to_error = "0.1"
+console_engine = "2.6.0"
 [dependencies.reqwest]
 version = "^0.11"
 features = ["json", "multipart"]

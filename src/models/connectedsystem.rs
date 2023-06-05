@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::models::systemtype;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
@@ -22,4 +24,14 @@ pub struct ConntectedSystem {
     pub x: i64,
     pub y: i64,
     pub distance: i64,
+}
+
+impl fmt::Display for ConntectedSystem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Symbol: {}\nSector Symbol: {}\nSystem Type: {:?}\nFaction Symbol: {}\nCoordinates: {},{}\nDistance: {}\n",
+            self.symbol, self.sectorSymbol, self.type_field, self.factionSymbol, self.x, self.y, self.distance
+        )
+    }
 }

@@ -46,7 +46,7 @@ impl fmt::Display for Contract {
         match self.type_field {
             ContractType::PROCUREMENT => {
                 let mut disp = format!(
-                    "Contract number ({}): You are requested to deliver the items below:",
+                    "Contract ID({}): You are requested to deliver the items below:",
                     self.id
                 );
                 disp = disp.to_owned() + "\n";

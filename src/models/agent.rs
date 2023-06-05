@@ -1,3 +1,5 @@
+use std::fmt;
+
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
@@ -16,4 +18,14 @@ pub struct Agent {
      * The number of credits the agent has available. Credits can be negative if funds have been overdrawn.
      */
     pub credits: i64,
+}
+
+impl fmt::Display for Agent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let disp = format!(
+            "Account ID: {}\nSymbol    : {}\nHQ        : {}\nCredits   : {}",
+            self.accountId, self.symbol, self.headquarters, self.credits
+        );
+        write!(f, "{}", disp)
+    }
 }

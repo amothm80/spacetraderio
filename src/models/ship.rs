@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::models::shipcargo;
 use crate::models::shipcrew;
 use crate::models::shipengine;
@@ -54,4 +56,30 @@ pub struct Ship {
      * Details of the ship's fuel tanks including how much fuel was consumed during the last transit or action.
      */
     pub fuel: shipfuel::ShipFuel,
+}
+
+impl fmt::Display for Ship {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut disp = format!(
+            "Ship Symbol: {:?}\n\nRegistration Data:\n{}\n\nNavigation Information:\n{}\n\n",
+            self.symbol, self.registration, self.nav
+        );
+        disp = disp.to_owned()
+            + format!(
+                "Crew Information:\n{}\n\nFrame Information:\n{}\n\nReactor Information:\n{}\n\nEngine Information:\n{}\n\n",
+                self.crew, self.frame, self.reactor,self.engine
+            )
+            .as_str();
+        disp = disp.to_owned() + "Module Information:\n";
+        for module in &self.modules {
+            disp = disp.to_owned() + format!("{}", module).as_str()
+        }
+        disp = disp.to_owned() + "\nMount Information:\n";
+        for mount in &self.mounts {
+            disp = disp.to_owned() + format!("{}", mount).as_str()
+        }
+        disp = disp.to_owned() + format!("\nCargo Information:\n{}\n", self.cargo).as_str();
+        disp = disp.to_owned() + format!("\nFuel:\n{}\n", self.fuel).as_str();
+        write!(f, "{}", disp)
+    }
 }

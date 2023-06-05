@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::models::waypointtype;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
@@ -19,4 +21,14 @@ pub struct ShipNavRouteWaypoint {
     pub systemSymbol: String,
     pub x: i64,
     pub y: i64,
+}
+
+impl fmt::Display for ShipNavRouteWaypoint {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Sytem: {}({:?}), Coords {},{}",
+            self.systemSymbol, self.type_field, self.x, self.y
+        )
+    }
 }
