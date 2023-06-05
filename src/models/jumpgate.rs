@@ -26,13 +26,15 @@ pub struct JumpGate {
 
 impl fmt::Display for JumpGate {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "Jump Gate Information:\nJump Range: {}\nFaction Symbol: {}\n{:?}",
-            self.jumpRange,
-            self.factionSymbol,
-            self.connectedSystems,
-            //self.connectedSystems.iter().flatten()
-        )
+        let mut disp = format!(
+            "Jump Gate Information:\nJump Range: {}\nFaction Symbol: {}\nConnected Systems:\n",
+            self.jumpRange, self.factionSymbol
+        );
+
+        for system in &self.connectedSystems {
+            disp = disp.to_owned() + format!("{}\n", system).as_str();
+        }
+
+        write!(f, "{}", disp)
     }
 }
