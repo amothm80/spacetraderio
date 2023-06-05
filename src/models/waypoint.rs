@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::models::chart;
 use crate::models::waypointfaction;
 use crate::models::waypointorbital;
@@ -5,7 +7,6 @@ use crate::models::waypointtrait;
 use crate::models::waypointtype;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 //#[serde(rename_all = "camelCase")]
@@ -36,4 +37,19 @@ pub struct Waypoint {
      */
     #[serde(default)]
     chart: chart::Chart,
+}
+
+impl fmt::Display for Waypoint {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut disp = format!(
+            "Symbol: {}\nType: {:?}\nSystem Symbol: {}\nCoordinates: {},{}\n",
+            self.symbol, self.type_field, self.systemSymbol, self.x, self.y
+        );
+
+        // for orb in &self.orbitals {
+        //     disp = disp.to_owned() + format!("Orbital: {}\n", orb).as_str();
+        // }
+
+        write!(f, "{}", disp)
+    }
 }

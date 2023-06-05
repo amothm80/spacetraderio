@@ -66,9 +66,30 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                 println!("{}\n\n", ship);
             }
         }
+        "system" => match args[2].as_str() {
+            "all" => {
+                let systems = systems::get_systems(&conf).await?;
+                for system in systems {
+                    println!("{}\n", system);
+                }
+            }
+            "waypoint" => match args[3].as_str() {
+                "all" => {}
+                "market" => {}
+                "shipyard" => {}
+                "jumpgate" => {}
+                _ => {
+                    let waypoints =
+                        systems::get_system_waypoints(&conf, args[3].to_owned()).await?;
+                    for wp in waypoints {
+                        println!("{}", wp);
+                    }
+                }
+            },
+            _ => {}
+        },
         _ => println!("invalid argument"),
     }
-    //println!("{:#?}",systems::get_systems(&conf).await);
     //println!("{:#?}",systems::get_system_waypoints(&conf, String::from("X1-ZA40")).await);
     //println!("{:#?}",systems::get_system_waypoint(&conf, String::from("X1-ZA40"), String::from("X1-ZA40-41138D")).await);
     //println!("{:#?}",systems::get_waypoint_market(&conf, String::from("X1-ZA40"), String::from("X1-ZA40-41138D")).await);
