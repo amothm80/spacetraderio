@@ -22,9 +22,9 @@ pub struct Chart {
 
 impl fmt::Display for Chart {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
+        writeln!(
             f,
-            "Chart Information:\nWaypoint: {}\nSubmitted By: {}\nSubmitted On: {}\n",
+            "Chart Information:\nWaypoint: {}\nSubmitted By: {}\nSubmitted On: {}",
             self.waypointSymbol, self.submittedBy, self.submittedOn
         )
     }

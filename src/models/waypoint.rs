@@ -41,15 +41,25 @@ pub struct Waypoint {
 
 impl fmt::Display for Waypoint {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let faction_check = waypointfaction::WaypointFaction::default();
+        let char_check = chart::Chart::default();
         let mut disp = format!(
             "Symbol: {}\nType: {:?}\nSystem Symbol: {}\nCoordinates: {},{}\n",
             self.symbol, self.type_field, self.systemSymbol, self.x, self.y
         );
 
-        // for orb in &self.orbitals {
-        //     disp = disp.to_owned() + format!("Orbital: {}\n", orb).as_str();
-        // }
-
-        write!(f, "{}", disp)
+        for orb in &self.orbitals {
+            disp = disp.to_owned() + format!("{}", orb).as_str();
+        }
+        if self.faction != faction_check {
+            disp = disp.to_owned() + format!("Faction: {:?}\n", self.faction).as_str();
+        }
+        for tr in &self.traits {
+            disp = disp.to_owned() + format!("{}", tr).as_str();
+        }
+        if self.chart != char_check {
+            disp = disp.to_owned() + format!("{}", self.chart).as_str();
+        }
+        writeln!(f, "{}", disp)
     }
 }

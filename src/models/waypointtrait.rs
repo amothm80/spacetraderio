@@ -1,3 +1,5 @@
+use std::fmt;
+
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
@@ -82,4 +84,10 @@ pub struct WaypointTrait {
      * A description of the trait.
      */
     pub description: String,
+}
+
+impl fmt::Display for WaypointTrait {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "Trait: {}({:?})", self.name, self.symbol)
+    }
 }
