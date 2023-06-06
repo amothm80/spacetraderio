@@ -83,12 +83,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                 }
                 "market" => {
                     println!(
-                        "{:#?}",
+                        "{}",
                         systems::get_waypoint_market(&conf, args[4].to_owned(), args[5].to_owned())
-                            .await
+                            .await?
                     )
                 }
-                "shipyard" => {}
+                "shipyard" => {
+                    println!(
+                        "{:#?}",
+                        systems::get_waypoint_shipyard(
+                            &conf,
+                            args[4].to_owned(),
+                            args[5].to_owned()
+                        )
+                        .await?
+                    );
+                }
                 "jumpgate" => {}
                 _ => {
                     let waypoints =

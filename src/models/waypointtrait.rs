@@ -88,6 +88,6 @@ pub struct WaypointTrait {
 
 impl fmt::Display for WaypointTrait {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "Trait: {}({:?})", self.name, self.symbol)
+        writeln!(f, "Trait: {} ({:?})", self.name, self.symbol)
     }
 }

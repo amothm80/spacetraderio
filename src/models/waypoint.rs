@@ -52,7 +52,7 @@ impl fmt::Display for Waypoint {
             disp = disp.to_owned() + format!("{}", orb).as_str();
         }
         if self.faction != faction_check {
-            disp = disp.to_owned() + format!("Faction: {:?}\n", self.faction).as_str();
+            disp = disp.to_owned() + format!("Faction: {}\n", self.faction.symbol).as_str();
         }
         for tr in &self.traits {
             disp = disp.to_owned() + format!("{}", tr).as_str();

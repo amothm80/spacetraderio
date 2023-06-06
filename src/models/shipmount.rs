@@ -69,13 +69,16 @@ pub struct ShipMount {
 
 impl fmt::Display for ShipMount {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let deposit_check = ShipMountDeposit::default();
         let mut disp = format!(
             "{}({:?}) STR:{}\nDeposits:\n",
             self.name, self.symbol, self.strength
         );
 
         for deposit in &self.deposits {
-            disp = disp.to_owned() + format!("{:?}", deposit).as_str() + "\n";
+            if *deposit != deposit_check {
+                disp = disp.to_owned() + format!("{:?}", deposit).as_str() + "\n";
+            }
         }
 
         disp = disp.to_owned() + format!("{}\n", self.requirements).as_str();

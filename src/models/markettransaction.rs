@@ -1,6 +1,7 @@
+use std::fmt;
+
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
@@ -49,4 +50,15 @@ pub struct MarketTransaction {
      * The timestamp of the transaction.
      */
     pub timestamp: String,
+}
+
+impl fmt::Display for MarketTransaction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let disp = format!(
+            "Waypoint Symbol: {}\nShip Symbol: {}\nTrade Symbol: {}\nType: {:?}\nUnits: {}\nPrice Per Unit: {}\nTotal Price: {}\n Timestamp: {}\n",
+            self.waypointSymbol, self.shipSymbol, self.tradeSymbol, self.type_field, self.units, self.pricePerUnit, self.totalPrice, self.timestamp
+        );
+
+        write!(f, "{}", disp)
+    }
 }

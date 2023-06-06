@@ -4,7 +4,6 @@ use crate::models::shipyardtransaction;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 //#[serde(rename_all = "camelCase")]
 #[allow(non_camel_case_types)]
@@ -17,6 +16,7 @@ pub struct Shipyard {
     /**
      * The list of ship types available for purchase at this shipyard.
      */
+    #[serde(rename = "type")]
     pub shipTypes: Vec<shiptype::ShipType>,
     /**
      * The list of recent transactions at this shipyard.

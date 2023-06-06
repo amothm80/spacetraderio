@@ -1,6 +1,7 @@
 use std::fmt;
 
 use crate::models::shipcargoitem;
+use crate::models::shipcargoitem::ShipCargoItem;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
@@ -25,12 +26,15 @@ pub struct ShipCargo {
 
 impl fmt::Display for ShipCargo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let inv_check = ShipCargoItem::default();
         let mut disp = format!(
             "Ship cargo bay is at {} units out of capacity of {} units\nCargo Inventory:\n",
             self.units, self.capacity
         );
         for item in &self.inventory {
-            let disp = disp.to_owned() + format!("{}", item).as_str() + "\n";
+            if *item != inv_check {
+                disp = disp.to_owned() + format!("{}", item).as_str() + "\n";
+            }
         }
         write!(f, "{}", disp)
     }
