@@ -100,15 +100,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                     );
                 }
                 "jumpgate" => {}
-                _ => {
-                    let waypoints =
-                        systems::get_system_waypoints(&conf, args[3].to_owned()).await?;
-                    for wp in waypoints {
-                        println!("{}", wp);
-                    }
-                }
+                _ => {}
             },
-            _ => {}
+            _ => {
+                let waypoints = systems::get_system_waypoints(&conf, args[2].to_owned()).await?;
+                for wp in waypoints {
+                    println!("{}", wp);
+                }
+            }
         },
         _ => println!("invalid argument"),
     }

@@ -16,7 +16,6 @@ pub struct Shipyard {
     /**
      * The list of ship types available for purchase at this shipyard.
      */
-    #[serde(rename = "type")]
     pub shipTypes: Vec<shiptype::ShipType>,
     /**
      * The list of recent transactions at this shipyard.
