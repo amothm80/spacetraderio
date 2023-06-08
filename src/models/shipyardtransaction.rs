@@ -1,6 +1,7 @@
+use std::fmt;
+
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 //#[serde(rename_all = "camelCase")]
@@ -27,4 +28,19 @@ pub struct ShipyardTransaction {
      * The timestamp of the transaction.
      */
     pub timestamp: String,
+}
+
+impl fmt::Display for ShipyardTransaction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut disp = format!(
+            "Transaction waypoint: {}\n
+            Ship bought: {}\n
+            Ship price: {}\n
+            Bought by: {}\n
+            On: {}\n",
+            self.waypointSymbol, self.shipSymbol, self.price, self.agentSymbol, self.timestamp
+        );
+
+        write!(f, "{}", disp)
+    }
 }

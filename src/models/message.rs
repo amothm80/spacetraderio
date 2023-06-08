@@ -69,7 +69,7 @@ pub struct MessageContractAcceptance {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct MessageContractAcceptanceData{
+pub struct MessageContractAcceptanceData {
     #[serde(default)]
     pub contract: contract::Contract,
     #[serde(default)]
@@ -91,11 +91,11 @@ pub struct MessageContractFulfillment {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct MessageContractFulfillmentData{
+pub struct MessageContractFulfillmentData {
     #[serde(default)]
     pub agent: agent::Agent,
     #[serde(default)]
-    pub contract: contract::Contract,   
+    pub contract: contract::Contract,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -121,7 +121,6 @@ pub struct MessageFactions {
     #[serde(default)]
     pub error: ErrorContent,
 }
-
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
@@ -157,7 +156,6 @@ pub struct MessageSystems {
     #[serde(default)]
     pub error: ErrorContent,
 }
-
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
@@ -218,6 +216,63 @@ pub struct MessageJumpgate {
     #[serde(default)]
     pub error: ErrorContent,
 }
+/////////////////////////////////////////////////////////////
+//SHIP MESSAGES
+////////////////////////////////////////////////////////////
+
+//SHIP PURCHASE
+///////////////
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipPurchase {
+    #[serde(default)]
+    pub data: MessageShipPurchaseData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipPurchaseData {
+    #[serde(default)]
+    pub agent: agent::Agent,
+    #[serde(default)]
+    pub ship: ship::Ship,
+    #[serde(default)]
+    pub transaction: shipyardtransaction::ShipyardTransaction,
+}
+
+//SHIP NAVIGATION
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipNavigation {
+    #[serde(default)]
+    pub data: MessageShipNavigationData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipNavigationData {
+    #[serde(default)]
+    pub fuel: shipfuel::ShipFuel,
+    #[serde(default)]
+    pub shipnav: shipnav::ShipNav,
+    #[serde(default)]
+    pub transaction: shipyardtransaction::ShipyardTransaction,
+}
+
 // #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 // //#[serde(untagged)]
 // //#[allow(non_camel_case_types)]
@@ -237,7 +292,7 @@ pub struct MessageJumpgate {
 //     // contractfulfillment {
 //     //     agent: agent::Agent,
 //     //     contract: contract::Contract,
-//     // },    
+//     // },
 //     //contracts(Vec<contract::Contract>),
 //     contractdelivergood(contractdelivergood::ContractDeliverGood),
 //     contractpayment(contractpayment::ContractPayment),

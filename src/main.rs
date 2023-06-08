@@ -60,12 +60,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                 println!("{}", agent::get_contract(&conf, args[2].to_owned()).await?)
             }
         },
-        "ships" => {
-            let ships = ships::get_my_ships(&conf).await?;
-            for ship in ships {
-                println!("{}\n\n", ship);
+        "ships" => match args[2].as_str() {
+            "buy" => {
+                let (agent, ship, shipyardtx) =
+                    ships::buy_ship(&conf, args[3].to_owned(), args[4].to_owned()).await?;
+                println!("{}\n{}\n{}\n\nBOUGHT\n", agent, ship, shipyardtx)
             }
-        }
+            "navigate" => println!(
+                "{:#?}\n",
+                ships::navigate_ship(&conf, args[3].to_owned(), args[4].to_owned()).await?
+            ),
+            _ => {
+                let ships = ships::get_my_ships(&conf).await?;
+                for ship in ships {
+                    println!("{}\n\n", ship);
+                }
+            }
+        },
         "system" => match args[2].as_str() {
             "all" => {
                 let systems = systems::get_systems(&conf).await?;
@@ -90,8 +101,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                 }
                 "shipyard" => {
                     println!(
-                        "{:#?}",
+                        "{}",
                         systems::get_waypoint_shipyard(
+                            //cargo run system waypoint shipyard X1-HQ18 X1-HQ18-60817D
                             &conf,
                             args[4].to_owned(),
                             args[5].to_owned()

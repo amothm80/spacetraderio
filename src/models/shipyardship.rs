@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::models::shipengine;
 use crate::models::shipframe;
 use crate::models::shipmodule;
@@ -33,4 +35,28 @@ pub struct ShipyardShip {
     pub engine: shipengine::ShipEngine,
     pub modules: Vec<shipmodule::ShipModule>,
     pub mounts: Vec<shipmount::ShipMount>,
+}
+
+impl fmt::Display for ShipyardShip {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut disp = format!(
+            "Ship Symbol: {}\nShip Type: {:?}\nShip Name: {}\nShip Description: {}\nPurchase Price: {}\n",
+            self.symbol, self.type_field, self.name, self.description, self.purchasePrice
+        );
+        disp = disp.to_owned()
+            + format!(
+                "Frame Information:\n{}\n\nReactor Information:\n{}\n\nEngine Information:\n{}\n\n",
+                self.frame, self.reactor, self.engine
+            )
+            .as_str();
+        disp = disp.to_owned() + "Module Information:\n";
+        for module in &self.modules {
+            disp = disp.to_owned() + format!("{}", module).as_str()
+        }
+        disp = disp.to_owned() + "\nMount Information:\n";
+        for mount in &self.mounts {
+            disp = disp.to_owned() + format!("{}", mount).as_str()
+        }
+        write!(f, "{}", disp)
+    }
 }

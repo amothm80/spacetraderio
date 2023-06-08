@@ -127,7 +127,7 @@ pub async fn get_waypoint_shipyard(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    println!("{}", text);
+    //println!("{}", text);
     let json = serde_json::from_str::<message::MessageShipyard>(&text).unwrap();
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)

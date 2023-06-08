@@ -19,7 +19,7 @@
                     "kind": "bin"
                 }
             },
-            "args": ["accept","clig9e9gp0167s60dr2oyu89i"],
+            "args": ["ships","navigate","HAMMOUDITH-2","X1-HQ18-98695F"],
             "cwd": "${workspaceFolder}"
         },
         {
@@ -38,7 +38,7 @@
                     "kind": "bin"
                 }
             },
-            "args": ["accept","clig9e9gp0167s60dr2oyu89i"],
+            "args": ["ships","navigate","HAMMOUDITH-2","X1-HQ18-98695F"],
             "cwd": "${workspaceFolder}"
         }
     ]
