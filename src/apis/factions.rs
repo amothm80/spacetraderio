@@ -29,7 +29,7 @@ pub async fn get_factions(
     }
 }
 
-pub async fn get_faction(
+pub async fn get_faction_info(
     config: &config::Config,
     factionsymbol: String,
 ) -> Result<faction::Faction, errors::STError> {

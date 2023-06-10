@@ -3,6 +3,7 @@ pub mod models;
 
 use apis::agent;
 use apis::config::Config;
+use apis::contracts;
 use apis::errors;
 use apis::factions;
 use apis::ships;
@@ -30,12 +31,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
             }
             _ => println!(
                 "{}",
-                factions::get_faction(&conf, args[2].to_owned()).await?
+                factions::get_faction_info(&conf, args[2].to_owned()).await?
             ),
         },
         "contract" => match args[2].as_str() {
             "all" => {
-                let contracts = agent::get_my_contracts(&conf).await?;
+                let contracts = contracts::get_my_contracts(&conf).await?;
                 for contract in contracts {
                     println!("{}\n", contract);
                 }
@@ -43,7 +44,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
             "accept" => {
                 println!(
                     "{}\nACCEPTED",
-                    agent::accept_contract(&conf, args[3].to_owned()).await?
+                    contracts::accept_contract(&conf, args[3].to_owned()).await?
                 )
             }
             // match agent::accept_contract(&conf, args[3].to_owned()).await {
@@ -53,22 +54,30 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
             "fulfill" => {
                 println!(
                     "{}\nFULILLED",
-                    agent::fulfill_contract(&conf, args[3].to_owned()).await?
+                    contracts::fulfill_contract(&conf, args[3].to_owned()).await?
                 );
             }
             _ => {
-                println!("{}", agent::get_contract(&conf, args[2].to_owned()).await?)
+                println!(
+                    "{}",
+                    contracts::get_contract_info(&conf, args[2].to_owned()).await?
+                )
             }
         },
         "ships" => match args[2].as_str() {
             "buy" => {
-                let (agent, ship, shipyardtx) =
-                    ships::buy_ship(&conf, args[3].to_owned(), args[4].to_owned()).await?;
-                println!("{}\n{}\n{}\n\nBOUGHT\n", agent, ship, shipyardtx)
+                println!(
+                    "{}\nBOUGHT\n",
+                    ships::buy_ship(&conf, args[3].to_owned(), args[4].to_owned()).await?
+                )
             }
             "navigate" => println!(
-                "{:#?}\n",
+                "{}\n",
                 ships::navigate_ship(&conf, args[3].to_owned(), args[4].to_owned()).await?
+            ),
+            "cargo" => println!(
+                "{}",
+                ships::get_my_ship_cargo(&conf, args[3].to_owned()).await?
             ),
             _ => {
                 let ships = ships::get_my_ships(&conf).await?;
@@ -88,8 +97,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                 "info" => {
                     println!(
                         "{}",
-                        systems::get_system_waypoint(&conf, args[4].to_owned(), args[5].to_owned())
-                            .await?
+                        systems::get_system_waypoint_info(
+                            &conf,
+                            args[4].to_owned(),
+                            args[5].to_owned()
+                        )
+                        .await?
                     );
                 }
                 "market" => {

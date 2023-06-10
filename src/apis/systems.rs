@@ -52,7 +52,7 @@ pub async fn get_system_waypoints(
     }
 }
 
-pub async fn get_system_waypoint(
+pub async fn get_system_waypoint_info(
     config: &config::Config,
     system: String,
     waypoint: String,
