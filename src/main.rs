@@ -79,6 +79,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                 "{}",
                 ships::get_my_ship_cargo(&conf, args[3].to_owned()).await?
             ),
+            "orbit" => println!("{}", ships::orbit_my_ship(&conf, args[3].to_owned()).await?),
             _ => {
                 let ships = ships::get_my_ships(&conf).await?;
                 for ship in ships {

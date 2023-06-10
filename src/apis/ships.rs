@@ -5,6 +5,7 @@ use crate::models::message::MessageShipNavigationData;
 use crate::models::message::MessageShipPurchaseData;
 use crate::models::ship;
 use crate::models::shipcargo;
+use crate::models::shipnav;
 //use reqwest::Error;
 
 pub async fn get_my_ships(config: &config::Config) -> Result<Vec<ship::Ship>, errors::STError> {
@@ -96,7 +97,7 @@ pub async fn get_my_ship_cargo(
     let client = &config.client;
     let mut reqbuilder = client.request(
         reqwest::Method::GET,
-        config.base_path.to_owned() + "/my/ships" + ship_symbol.as_str() + "/cargo",
+        config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/cargo",
     );
     reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
     let req = reqbuilder.build()?;
@@ -108,6 +109,59 @@ pub async fn get_my_ship_cargo(
     let json = serde_json::from_str::<message::MessageShipCargo>(&text).unwrap();
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
+    } else {
+        Err(errors::STError::stapierror(json.error))
+    }
+}
+
+pub async fn orbit_my_ship(
+    config: &config::Config,
+    ship_symbol: String,
+) -> Result<shipnav::ShipNav, errors::STError> {
+    let client = &config.client;
+    let mut reqbuilder = client.request(
+        reqwest::Method::POST,
+        config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/orbit",
+    );
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
+    reqbuilder = reqbuilder.header("Content-length", 0);
+    let req = reqbuilder.build()?;
+    let resp = client.execute(req).await?;
+    let status = resp.status();
+    let text = resp.text().await?;
+    //println!("{:#?}", text);
+    //let json = resp.json::<message::Message>().await?;
+    let json = serde_json::from_str::<message::MessageShipOrbit>(&text).unwrap();
+    if !status.is_client_error() && !status.is_server_error() {
+        Ok(json.data.nav)
+    } else {
+        Err(errors::STError::stapierror(json.error))
+    }
+}
+
+pub async fn refine_materials(
+    config: &config::Config,
+    ship_symbol: String,
+    produce: String,
+) -> Result<shipnav::ShipNav, errors::STError> {
+    let client = &config.client;
+    let mut reqbuilder = client.request(
+        reqwest::Method::POST,
+        config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/orbit",
+    );
+    let payload = format!("{{\"produce\":\"{produce}\"}}");
+    reqbuilder = reqbuilder.header("Content-length", payload.len());
+    reqbuilder = reqbuilder.header("Content-type", "application/json");
+    reqbuilder = reqbuilder.body(payload);
+    let req = reqbuilder.build()?;
+    let resp = client.execute(req).await?;
+    let status = resp.status();
+    let text = resp.text().await?;
+    //println!("{:#?}", text);
+    //let json = resp.json::<message::Message>().await?;
+    let json = serde_json::from_str::<message::MessageShipOrbit>(&text).unwrap();
+    if !status.is_client_error() && !status.is_server_error() {
+        Ok(json.data.nav)
     } else {
         Err(errors::STError::stapierror(json.error))
     }

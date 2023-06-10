@@ -299,6 +299,34 @@ pub struct MessageShipCargo {
     pub error: ErrorContent,
 }
 
+//SHIP NAVIGATION
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipOrbit {
+    #[serde(default)]
+    pub data: MessageShipOrbitData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipOrbitData {
+    #[serde(default)]
+    pub nav: shipnav::ShipNav,
+}
+
+impl fmt::Display for MessageShipOrbitData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}\n", self.nav)
+    }
+}
+
 ///////////////////////////////////////////////
 ///Errors
 //////////////////////////////////////////////
