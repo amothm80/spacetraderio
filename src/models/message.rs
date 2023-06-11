@@ -3,7 +3,10 @@ use serde_derive::Deserialize;
 use serde_derive::Serialize;
 use std::fmt;
 
+use super::cooldown::Cooldown;
 use super::meta::Meta;
+use super::shipcargo::ShipCargo;
+use super::shipnav::ShipNav;
 // #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 // //#[allow(non_camel_case_types)]
 // #[allow(non_camel_case_types)]
@@ -324,6 +327,320 @@ pub struct MessageShipOrbitData {
 impl fmt::Display for MessageShipOrbitData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}\n", self.nav)
+    }
+}
+
+//SHIP CHART
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipChart {
+    #[serde(default)]
+    pub data: MessageShipChartData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipChartData {
+    #[serde(default)]
+    pub chart: chart::Chart,
+    #[serde(default)]
+    pub waypoint: waypoint::Waypoint,
+}
+
+impl fmt::Display for MessageShipChartData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}\n{}\n", self.chart, self.waypoint)
+    }
+}
+
+//SHIP COOLDOWN
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipCooldown {
+    #[serde(default)]
+    pub data: cooldown::Cooldown,
+    #[serde(default)]
+    pub no_cooldown: String,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+impl fmt::Display for MessageShipCooldown {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}\n{}\n", self.data, self.no_cooldown)
+    }
+}
+
+//SHIP CHART
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipSurvey {
+    #[serde(default)]
+    pub data: MessageShipSurveyData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipSurveyData {
+    #[serde(default)]
+    pub cooldown: chart::Chart,
+    #[serde(default)]
+    pub surveys: MessageShipSurveyDataSurveys,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipSurveyDataSurveys {
+    #[serde(default)]
+    pub items: Vec<survey::Survey>,
+}
+
+impl fmt::Display for MessageShipSurveyData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut disp = format!("{}", self.cooldown);
+        if !self.surveys.items.is_empty() {
+            for item in &self.surveys.items {
+                disp = disp.to_owned() + format!("{}\n", item).as_str();
+            }
+        }
+
+        writeln!(f, "{}", disp)
+    }
+}
+
+//SHIP EXTRACT RESOURCE
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipExtract {
+    #[serde(default)]
+    pub data: MessageShipSurveyData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipExtractData {
+    #[serde(default)]
+    pub cooldown: chart::Chart,
+    #[serde(default)]
+    pub extraction: extraction::Extraction,
+    #[serde(default)]
+    pub cargo: ShipCargo,
+}
+
+impl fmt::Display for MessageShipExtractData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "{}\n{}\n{}", self.cooldown, self.extraction, self.cargo)
+    }
+}
+
+//SHIP JETTISON CARGO
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipJettison {
+    #[serde(default)]
+    pub data: MessageShipJettisonData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipJettisonData {
+    #[serde(default)]
+    pub cargo: ShipCargo,
+}
+
+impl fmt::Display for MessageShipJettisonData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "{}", self.cargo)
+    }
+}
+
+//SHIP JUMP
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipJump {
+    #[serde(default)]
+    pub data: MessageShipJumpData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipJumpData {
+    #[serde(default)]
+    pub cooldown: Cooldown,
+    #[serde(default)]
+    pub nav: ShipNav,
+}
+
+impl fmt::Display for MessageShipJumpData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "{}\n{}", self.cooldown, self.nav)
+    }
+}
+
+//SHIP NAV
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipNav {
+    #[serde(default)]
+    pub data: shipnav::ShipNav,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+impl fmt::Display for MessageShipNav {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "{}", self.data)
+    }
+}
+
+//SHIP WARP
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipWarp {
+    #[serde(default)]
+    pub data: MessageShipWarpData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipWarpData {
+    #[serde(default)]
+    pub fuel: shipfuel::ShipFuel,
+    #[serde(default)]
+    pub nav: ShipNav,
+}
+
+impl fmt::Display for MessageShipWarpData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "{}\n{}", self.fuel, self.nav)
+    }
+}
+
+//SHIP SELL CARGO
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipSellCargo {
+    #[serde(default)]
+    pub data: MessageShipSellCargoData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipSellCargoData {
+    #[serde(default)]
+    pub agent: agent::Agent,
+    #[serde(default)]
+    pub cargo: shipcargo::ShipCargo,
+    #[serde(default)]
+    pub transaction: markettransaction::MarketTransaction,
+}
+
+impl fmt::Display for MessageShipSellCargoData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "{}\n{}\n{}", self.agent, self.cargo, self.transaction)
+    }
+}
+
+//SHIP SCAN SYSTEMS
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipScanSystems {
+    #[serde(default)]
+    pub data: MessageShipScanSystemsData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipScanSystemsData {
+    #[serde(default)]
+    pub cooldown: cooldown::Cooldown,
+    #[serde(default)]
+    pub systems: MessageShipScanSystemsDataScannedSystems,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipScanSystemsDataScannedSystems {
+    #[serde(default)]
+    pub items: Vec<scannedsystem::ScannedSystem>,
+}
+
+impl fmt::Display for MessageShipScanSystemsData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut disp = format!("{}\n", self.cooldown);
+        if !self.systems.items.is_empty() {
+            for item in &self.systems.items {
+                disp = disp.to_owned() + format!("System Data:\n{}", item).as_str();
+            }
+        }
+
+        writeln!(f, "{}", disp)
     }
 }
 

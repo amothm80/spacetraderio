@@ -1,3 +1,5 @@
+use std::fmt;
+
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
@@ -13,4 +15,10 @@ pub struct SurveyDeposit {
      * The symbol of the deposit.
      */
     pub symbol: String,
+}
+
+impl fmt::Display for SurveyDeposit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "{}", self.symbol)
+    }
 }

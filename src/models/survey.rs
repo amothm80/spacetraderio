@@ -1,7 +1,8 @@
+use std::fmt;
+
 use crate::models::surveydeposit;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(non_camel_case_types)]
@@ -41,4 +42,21 @@ pub struct Survey {
      * The size of the deposit. This value indicates how much can be extracted from the survey before it is exhausted.
      */
     pub size: SurveySize,
+}
+
+impl fmt::Display for Survey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut disp = format!(
+            "Signature: {}\nSymbol: {}\nExpiration: {}\nSize: {:#?}\n",
+            self.signature, self.symbol, self.expiration, self.size
+        );
+
+        if !self.deposits.is_empty() {
+            for dep in &self.deposits {
+                disp = disp.to_owned() + format!("{}", dep).as_str();
+            }
+        }
+
+        write!(f, "{}", disp)
+    }
 }
