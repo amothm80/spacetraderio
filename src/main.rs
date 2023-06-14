@@ -21,6 +21,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     //let agent = agent::get_my_agent(&conf).await;
     //let mut contracts: Vec<models::contract::Contract> = vec![];
     match args[1].as_str() {
+        "register" => println!(
+            "{}",
+            agent::register(
+                &conf,
+                args[2].to_owned(), // "COSMIC","VOID", "GALACTIC","QUANTUM","DOMINION"
+                args[3].to_owned(), //3 to 14 characters
+                args[4].to_owned()
+            )
+            .await?
+        ),
         "agent" => println!("{}", agent::get_my_agent(&conf).await?),
         "faction" => match args[2].as_str() {
             "all" => {
@@ -80,6 +90,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                 ships::get_my_ship_cargo(&conf, args[3].to_owned()).await?
             ),
             "orbit" => println!("{}", ships::orbit_my_ship(&conf, args[3].to_owned()).await?),
+            "refine" => println!(
+                "{}",
+                ships::refine_materials(&conf, args[3].to_owned(), args[4].to_owned()).await?
+            ),
+            "chart" => println!(
+                "{}",
+                ships::chart_waypoint(&conf, args[3].to_owned()).await?
+            ),
+            "cooldown" => println!("{}", ships::get_cooldown(&conf, args[3].to_owned()).await?),
+            "dock" => println!("{}", ships::dock_ship(&conf, args[3].to_owned()).await?),
+            "refuel" => println!("{}", ships::refuel_ship(&conf, args[3].to_owned()).await?),
             _ => {
                 let ships = ships::get_my_ships(&conf).await?;
                 for ship in ships {
@@ -117,7 +138,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                     println!(
                         "{}",
                         systems::get_waypoint_shipyard(
-                            //cargo run system waypoint shipyard X1-HQ18 X1-HQ18-60817D
+                            //cargo run system waypoint shipyard X1-XT43 X1-XT43-27307E
                             &conf,
                             args[4].to_owned(),
                             args[5].to_owned()

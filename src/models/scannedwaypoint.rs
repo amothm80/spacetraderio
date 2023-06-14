@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::models::chart;
 use crate::models::waypointfaction;
 use crate::models::waypointorbital;
@@ -35,4 +37,32 @@ pub struct ScannedWaypoint {
      */
     #[serde(default)]
     pub chart: chart::Chart,
+}
+
+impl fmt::Display for ScannedWaypoint {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let faction_check = waypointfaction::WaypointFaction::default();
+        let char_check = chart::Chart::default();
+        let mut disp = format!(
+            "Symbol: {}\nSystem Symbol: {}\nType: {:#?}\nCoordinates: {},{}\nChart: {}\n",
+            self.symbol, self.systemSymbol, self.type_field, self.x, self.y, self.chart
+        );
+
+        if !self.orbitals.is_empty() {
+            for orb in &self.orbitals {
+                disp = disp.to_owned() + format!("{}", orb).as_str();
+            }
+        }
+        if self.faction != faction_check {
+            disp = disp.to_owned() + format!("Faction: {}\n", self.faction.symbol).as_str();
+        }
+        for tr in &self.traits {
+            disp = disp.to_owned() + format!("{}", tr).as_str();
+        }
+        if self.chart != char_check {
+            disp = disp.to_owned() + format!("{}", self.chart).as_str();
+        }
+
+        writeln!(f, "{}", disp)
+    }
 }

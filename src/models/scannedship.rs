@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::models::shipnav;
 use crate::models::shipregistration;
 use serde_derive::Deserialize;
@@ -68,4 +70,24 @@ pub struct ScannedShip {
     pub engine: ScannedShipEngine,
     #[serde(default)]
     pub mounts: Vec<ScannedShipMount>,
+}
+
+impl fmt::Display for ScannedShip {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut disp = format!(
+            "Symbol: {}\nFrame: {}\nReactor: {:#?}\nEngine: {}\n",
+            self.symbol, self.frame.symbol, self.reactor.symbol, self.engine.symbol
+        );
+
+        disp = disp.to_owned() + format!("{}\n", self.registration).as_str();
+        disp = disp.to_owned() + format!("{}\n", self.nav).as_str();
+        disp = disp.to_owned() + "Mounts: ";
+        if !self.mounts.is_empty() {
+            for mount in &self.mounts {
+                disp = disp.to_owned() + format!("{}\\", mount.symbol).as_str();
+            }
+        }
+
+        writeln!(f, "{}\n", disp)
+    }
 }

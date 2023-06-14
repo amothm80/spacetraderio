@@ -1,3 +1,5 @@
+use reqwest::Response;
+
 use crate::apis::config;
 use crate::apis::errors;
 use crate::models::cooldown;
@@ -207,6 +209,7 @@ pub async fn get_cooldown(
     reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
     let req = reqbuilder.build()?;
     let resp = client.execute(req).await?;
+
     let status = resp.status();
     let text = resp.text().await?;
     //println!("{:#?}",text);
@@ -238,9 +241,11 @@ pub async fn dock_ship(
         reqwest::Method::POST,
         config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/dock",
     );
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
     reqbuilder = reqbuilder.header("Content-length", 0);
     let req = reqbuilder.build()?;
     let resp = client.execute(req).await?;
+
     let status = resp.status();
     let text = resp.text().await?;
     //println!("{:#?}", text);
@@ -262,6 +267,7 @@ pub async fn survey_waypoint(
         reqwest::Method::POST,
         config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/survey",
     );
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
     reqbuilder = reqbuilder.header("Content-length", 0);
     let req = reqbuilder.build()?;
     let resp = client.execute(req).await?;
@@ -286,6 +292,7 @@ pub async fn extract_resource(
         reqwest::Method::POST,
         config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/extract",
     );
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
     reqbuilder = reqbuilder.header("Content-length", 0);
     let req = reqbuilder.build()?;
     let resp = client.execute(req).await?;
@@ -313,6 +320,7 @@ pub async fn jettison_cargo(
         config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/jettison",
     );
     let payload = format!("{{\"symbol\":\"{resource_symbol}\",\"units\":\"{units}\"}}");
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
     reqbuilder = reqbuilder.header("Content-length", payload.len());
     reqbuilder = reqbuilder.header("Content-type", "application/json");
     reqbuilder = reqbuilder.body(payload);
@@ -341,6 +349,7 @@ pub async fn ship_jump(
         config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/jump",
     );
     let payload = format!("{{\"systemSymbol\":\"{system_symbol}\"}}");
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
     reqbuilder = reqbuilder.header("Content-length", payload.len());
     reqbuilder = reqbuilder.header("Content-type", "application/json");
     reqbuilder = reqbuilder.body(payload);
@@ -369,6 +378,7 @@ pub async fn ship_update_nav(
         config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/nav",
     );
     let payload = format!("{{\"flightMode\":\"{flight_mode}\"}}");
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
     reqbuilder = reqbuilder.header("Content-length", payload.len());
     reqbuilder = reqbuilder.header("Content-type", "application/json");
     reqbuilder = reqbuilder.body(payload);
@@ -397,6 +407,7 @@ pub async fn ship_warp(
         config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/warp",
     );
     let payload = format!("{{\"waypointSymbol\":\"{waypoint_symbol}\"}}");
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
     reqbuilder = reqbuilder.header("Content-length", payload.len());
     reqbuilder = reqbuilder.header("Content-type", "application/json");
     reqbuilder = reqbuilder.body(payload);
@@ -426,6 +437,7 @@ pub async fn sell_cargo(
         config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/sell",
     );
     let payload = format!("{{\"symbol\":\"{cargo_symbol}\",\"units\":\"{units}\"}}");
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
     reqbuilder = reqbuilder.header("Content-length", payload.len());
     reqbuilder = reqbuilder.header("Content-type", "application/json");
     reqbuilder = reqbuilder.body(payload);
@@ -446,14 +458,13 @@ pub async fn sell_cargo(
 pub async fn scan_systems(
     config: &config::Config,
     ship_symbol: String,
-    cargo_symbol: String,
-    units: i64,
 ) -> Result<message::MessageShipScanSystemsData, errors::STError> {
     let client = &config.client;
     let mut reqbuilder = client.request(
         reqwest::Method::POST,
         config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/scan/systems",
     );
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
     reqbuilder = reqbuilder.header("Content-length", 0);
     let req = reqbuilder.build()?;
     let resp = client.execute(req).await?;
@@ -462,6 +473,142 @@ pub async fn scan_systems(
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
     let json = serde_json::from_str::<message::MessageShipScanSystems>(&text).unwrap();
+    if !status.is_client_error() && !status.is_server_error() {
+        Ok(json.data)
+    } else {
+        Err(errors::STError::stapierror(json.error))
+    }
+}
+
+pub async fn scan_waypoints(
+    config: &config::Config,
+    ship_symbol: String,
+) -> Result<message::MessageShipScanWaypointsData, errors::STError> {
+    let client = &config.client;
+    let mut reqbuilder = client.request(
+        reqwest::Method::POST,
+        config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/scan/waypoints",
+    );
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
+    reqbuilder = reqbuilder.header("Content-length", 0);
+    let req = reqbuilder.build()?;
+    let resp = client.execute(req).await?;
+    let status = resp.status();
+    let text = resp.text().await?;
+    //println!("{:#?}", text);
+    //let json = resp.json::<message::Message>().await?;
+    let json = serde_json::from_str::<message::MessageShipScanWaypoints>(&text).unwrap();
+    if !status.is_client_error() && !status.is_server_error() {
+        Ok(json.data)
+    } else {
+        Err(errors::STError::stapierror(json.error))
+    }
+}
+
+pub async fn scan_ships(
+    config: &config::Config,
+    ship_symbol: String,
+) -> Result<message::MessageShipScanShipsData, errors::STError> {
+    let client = &config.client;
+    let mut reqbuilder = client.request(
+        reqwest::Method::POST,
+        config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/scan/ships",
+    );
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
+    reqbuilder = reqbuilder.header("Content-length", 0);
+    let req = reqbuilder.build()?;
+    let resp = client.execute(req).await?;
+    let status = resp.status();
+    let text = resp.text().await?;
+    //println!("{:#?}", text);
+    //let json = resp.json::<message::Message>().await?;
+    let json = serde_json::from_str::<message::MessageShipScanShips>(&text).unwrap();
+    if !status.is_client_error() && !status.is_server_error() {
+        Ok(json.data)
+    } else {
+        Err(errors::STError::stapierror(json.error))
+    }
+}
+
+pub async fn refuel_ship(
+    config: &config::Config,
+    ship_symbol: String,
+) -> Result<message::MessageShipRefuelData, errors::STError> {
+    let client = &config.client;
+    let mut reqbuilder = client.request(
+        reqwest::Method::POST,
+        config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/refuel",
+    );
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
+    reqbuilder = reqbuilder.header("Content-length", 0);
+    let req = reqbuilder.build()?;
+    let resp = client.execute(req).await?;
+    let status = resp.status();
+    let text = resp.text().await?;
+    //println!("{:#?}", text);
+    //let json = resp.json::<message::Message>().await?;
+    let json = serde_json::from_str::<message::MessageShipRefuel>(&text).unwrap();
+    if !status.is_client_error() && !status.is_server_error() {
+        Ok(json.data)
+    } else {
+        Err(errors::STError::stapierror(json.error))
+    }
+}
+
+pub async fn purchase_cargo(
+    config: &config::Config,
+    ship_symbol: String,
+    resource_symbol: String,
+    units: i64,
+) -> Result<message::MessageShipPurchaseCargoData, errors::STError> {
+    let client = &config.client;
+    let mut reqbuilder = client.request(
+        reqwest::Method::POST,
+        config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/purchase",
+    );
+    let payload = format!("{{\"symbol\":\"{resource_symbol}\",\"units\":\"{units}\"}}");
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
+    reqbuilder = reqbuilder.header("Content-length", payload.len());
+    reqbuilder = reqbuilder.header("Content-type", "application/json");
+    reqbuilder = reqbuilder.body(payload);
+    let req = reqbuilder.build()?;
+    let resp = client.execute(req).await?;
+    let status = resp.status();
+    let text = resp.text().await?;
+    //println!("{:#?}", text);
+    //let json = resp.json::<message::Message>().await?;
+    let json = serde_json::from_str::<message::MessageShipPurchaseCargo>(&text).unwrap();
+    if !status.is_client_error() && !status.is_server_error() {
+        Ok(json.data)
+    } else {
+        Err(errors::STError::stapierror(json.error))
+    }
+}
+
+pub async fn transfer_cargo(
+    config: &config::Config,
+    ship_symbol: String,
+    trade_symbol: String,
+    units: i64,
+    ship_symbol_to: String,
+) -> Result<message::MessageShipTransferCargoData, errors::STError> {
+    let client = &config.client;
+    let mut reqbuilder = client.request(
+        reqwest::Method::POST,
+        config.base_path.to_owned() + "/my/ships/" + ship_symbol.as_str() + "/transfer",
+    );
+    let payload = format!("{{\"tradeSymbol\":\"{trade_symbol}\",\"units\":\"{units}\",\"shipSymbol\":\"{ship_symbol_to}\"}}");
+    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
+    reqbuilder = reqbuilder.header("Content-length", payload.len());
+    reqbuilder = reqbuilder.header("Content-type", "application/json");
+    reqbuilder = reqbuilder.body(payload);
+    let req = reqbuilder.build()?;
+    let resp = client.execute(req).await?;
+    let status = resp.status();
+    let text = resp.text().await?;
+    //println!("{:#?}", text);
+    //let json = resp.json::<message::Message>().await?;
+    let json = serde_json::from_str::<message::MessageShipTransferCargo>(&text).unwrap();
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {

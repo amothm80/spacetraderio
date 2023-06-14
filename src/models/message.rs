@@ -4,8 +4,10 @@ use serde_derive::Serialize;
 use std::fmt;
 
 use super::cooldown::Cooldown;
+use super::markettransaction::MarketTransaction;
 use super::meta::Meta;
 use super::shipcargo::ShipCargo;
+use super::shipfuel::ShipFuel;
 use super::shipnav::ShipNav;
 // #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 // //#[allow(non_camel_case_types)]
@@ -30,6 +32,43 @@ pub struct MessageMyAgent {
     pub meta: Meta,
     #[serde(default)]
     pub error: ErrorContent,
+}
+
+//REGISTER AGENT
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageAgentRegister {
+    #[serde(default)]
+    pub data: MessageAgentRegisterData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageAgentRegisterData {
+    #[serde(default)]
+    pub agent: agent::Agent,
+    #[serde(default)]
+    pub contract: contract::Contract,
+    #[serde(default)]
+    pub faction: faction::Faction,
+    #[serde(default)]
+    pub ship: ship::Ship,
+    #[serde(default)]
+    pub token: String,
+}
+
+impl fmt::Display for MessageAgentRegisterData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "Registration Details:\nAgent:\n{}\n\nContract:\n{}\n\nFaction:\n{}\n\nShip:\n{}\n\nToken:\n{}\n",
+    self.agent, self.contract, self.faction, self.ship, self.token)
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -641,6 +680,186 @@ impl fmt::Display for MessageShipScanSystemsData {
         }
 
         writeln!(f, "{}", disp)
+    }
+}
+
+//SHIP SCAN WAYPOINTS
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipScanWaypoints {
+    #[serde(default)]
+    pub data: MessageShipScanWaypointsData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipScanWaypointsData {
+    #[serde(default)]
+    pub cooldown: cooldown::Cooldown,
+    #[serde(default)]
+    pub waypoints: MessageShipScanWaypointsDataScannedWaypoints,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipScanWaypointsDataScannedWaypoints {
+    #[serde(default)]
+    pub items: Vec<scannedwaypoint::ScannedWaypoint>,
+}
+
+impl fmt::Display for MessageShipScanWaypointsData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut disp = format!("{}\n", self.cooldown);
+        if !self.waypoints.items.is_empty() {
+            for item in &self.waypoints.items {
+                disp = disp.to_owned() + format!("Waypoint Data:\n{}", item).as_str();
+            }
+        }
+
+        writeln!(f, "{}", disp)
+    }
+}
+
+//SHIP SCAN SHIPS
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipScanShips {
+    #[serde(default)]
+    pub data: MessageShipScanShipsData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipScanShipsData {
+    #[serde(default)]
+    pub cooldown: cooldown::Cooldown,
+    #[serde(default)]
+    pub waypoints: MessageShipScanShipsDataScannedShips,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipScanShipsDataScannedShips {
+    #[serde(default)]
+    pub items: Vec<scannedship::ScannedShip>,
+}
+
+impl fmt::Display for MessageShipScanShipsData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut disp = format!("{}\n", self.cooldown);
+        if !self.waypoints.items.is_empty() {
+            for item in &self.waypoints.items {
+                disp = disp.to_owned() + format!("Waypoint Data:\n{}", item).as_str();
+            }
+        }
+
+        writeln!(f, "{}", disp)
+    }
+}
+
+//SHIP REFUEL SHIPS
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipRefuel {
+    #[serde(default)]
+    pub data: MessageShipRefuelData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipRefuelData {
+    #[serde(default)]
+    pub agent: agent::Agent,
+    #[serde(default)]
+    pub fuel: ShipFuel,
+}
+
+impl fmt::Display for MessageShipRefuelData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "{}\n{}", self.agent, self.fuel)
+    }
+}
+
+//SHIP PURCHASE CARGO
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipPurchaseCargo {
+    #[serde(default)]
+    pub data: MessageShipPurchaseCargoData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipPurchaseCargoData {
+    #[serde(default)]
+    pub agent: agent::Agent,
+    #[serde(default)]
+    pub cargo: ShipCargo,
+    #[serde(default)]
+    pub transaction: MarketTransaction,
+}
+
+impl fmt::Display for MessageShipPurchaseCargoData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "{}\n{}\n{}\n", self.agent, self.cargo, self.transaction)
+    }
+}
+
+//SHIP TRANSFER CARGO
+/////////////////
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipTransferCargo {
+    #[serde(default)]
+    pub data: MessageShipTransferCargoData,
+    #[serde(default)]
+    pub meta: Meta,
+    #[serde(default)]
+    pub error: ErrorContent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub struct MessageShipTransferCargoData {
+    #[serde(default)]
+    pub cargo: ShipCargo,
+}
+
+impl fmt::Display for MessageShipTransferCargoData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "{}\n", self.cargo)
     }
 }
 

@@ -2,3 +2,4 @@
 token.txt
 **/*.rs.bk
 Cargo.lock
+agent.txt
