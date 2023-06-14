@@ -473,7 +473,7 @@ impl fmt::Display for MessageShipSurveyData {
 #[allow(non_snake_case)]
 pub struct MessageShipExtract {
     #[serde(default)]
-    pub data: MessageShipSurveyData,
+    pub data: MessageShipExtractData,
     #[serde(default)]
     pub meta: Meta,
     #[serde(default)]
@@ -485,7 +485,7 @@ pub struct MessageShipExtract {
 #[allow(non_snake_case)]
 pub struct MessageShipExtractData {
     #[serde(default)]
-    pub cooldown: chart::Chart,
+    pub cooldown: cooldown::Cooldown,
     #[serde(default)]
     pub extraction: extraction::Extraction,
     #[serde(default)]
@@ -867,13 +867,13 @@ impl fmt::Display for MessageShipTransferCargoData {
 ///Errors
 //////////////////////////////////////////////
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-//#[serde(rename_all = "camelCase")]
-#[allow(non_camel_case_types)]
-#[allow(non_snake_case)]
-pub struct Error {
-    pub error: ErrorContent,
-}
+// #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+// //#[serde(rename_all = "camelCase")]
+// #[allow(non_camel_case_types)]
+// #[allow(non_snake_case)]
+// pub struct Error {
+//     pub error: ErrorContent,
+// }
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 //#[serde(rename_all = "camelCase")]
 #[allow(non_camel_case_types)]

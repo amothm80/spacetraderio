@@ -1,5 +1,3 @@
-use reqwest::Response;
-
 use crate::apis::config;
 use crate::apis::errors;
 use crate::models::cooldown;
@@ -11,7 +9,7 @@ use crate::models::meta;
 use crate::models::ship;
 use crate::models::shipcargo;
 use crate::models::shipnav;
-use crate::models::shipnavflightmode;
+
 //use reqwest::Error;
 
 pub async fn get_my_ships(config: &config::Config) -> Result<Vec<ship::Ship>, errors::STError> {
@@ -25,13 +23,21 @@ pub async fn get_my_ships(config: &config::Config) -> Result<Vec<ship::Ship>, er
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    //println!("{:#?}",text);
-    //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageMyShips>(&text).unwrap();
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+
+    if !status.is_client_error() && !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageMyShips>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(ErrorContent {
+            message: String::from("No ship data."),
+            symbol: String::from(""),
+            code: 999,
+        }))
+        //Err(errors::STError::stapierror(json.error))
     }
 }
 
@@ -56,13 +62,21 @@ pub async fn buy_ship(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    //println!("{:#?}",text);
-    //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipPurchase>(&text).unwrap();
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+
+    if !status.is_client_error() && !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageShipPurchase>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(ErrorContent {
+            message: String::from("No ship data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
+        //Err(errors::STError::stapierror(json.error))
     }
 }
 
@@ -86,13 +100,20 @@ pub async fn navigate_ship(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    //println!("{:#?}",text);
-    //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipNavigation>(&text).unwrap();
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+
+    if !status.is_client_error() && !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageShipNavigation>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(ErrorContent {
+            message: String::from("No ship navigation data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -110,13 +131,20 @@ pub async fn get_my_ship_cargo(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    //println!("{:#?}",text);
-    //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipCargo>(&text).unwrap();
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+
+    if !status.is_client_error() && !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageShipCargo>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(ErrorContent {
+            message: String::from("No cargo data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -135,13 +163,19 @@ pub async fn orbit_my_ship(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    //println!("{:#?}", text);
-    //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipOrbit>(&text).unwrap();
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data.nav)
+    if !status.is_client_error() && !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageShipNav>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(ErrorContent {
+            message: String::from("No ship orbit data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -163,13 +197,19 @@ pub async fn refine_materials(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    //println!("{:#?}", text);
-    //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipOrbit>(&text).unwrap();
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    if !status.is_client_error() && !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageShipOrbit>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(ErrorContent {
+            message: String::from("No refine data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -187,20 +227,26 @@ pub async fn chart_waypoint(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    //println!("{:#?}", text);
-    //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipChart>(&text).unwrap();
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    if !status.is_client_error() && !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageShipChart>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(ErrorContent {
+            message: String::from("No chart data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
 pub async fn get_cooldown(
     config: &config::Config,
     ship_symbol: String,
-) -> Result<message::MessageShipCooldown, errors::STError> {
+) -> Result<cooldown::Cooldown, errors::STError> {
     let client = &config.client;
     let mut reqbuilder = client.request(
         reqwest::Method::GET,
@@ -210,26 +256,48 @@ pub async fn get_cooldown(
     let req = reqbuilder.build()?;
     let resp = client.execute(req).await?;
 
+    // let resp = match client.execute(req).await {
+    //     Ok(r) => r,
+    //     Err(e) => return Err(From::from(e)),
+    // };
+
     let status = resp.status();
     let text = resp.text().await?;
-    //println!("{:#?}",text);
-    //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipCooldown>(&text).unwrap();
-    if !status.is_client_error() && !status.is_server_error() {
-        if status.as_u16() == 204 {
-            let message = message::MessageShipCooldown {
-                data: cooldown::Cooldown::default(),
-                no_cooldown: String::from("No cooldown"),
-                meta: meta::Meta::default(),
-                error: ErrorContent::default(),
-            };
-            Ok(message)
+    if !status.is_client_error() && !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageShipCooldown>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
         } else {
-            Ok(json)
+            Ok(json.data)
         }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(ErrorContent {
+            message: String::from("No cooldown"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
+
+    // if !status.is_client_error() && !status.is_server_error() {
+    //     if status.as_u16() == 204 {
+    //         let message = message::MessageShipCooldown {
+    //             data: cooldown::Cooldown::default(),
+    //             no_cooldown: String::from("No cooldown"),
+    //             meta: meta::Meta::default(),
+    //             error: ErrorContent::default(),
+    //         };
+    //         Ok(message)
+    //     } else {
+    //         let json = serde_json::from_str::<message::MessageShipCooldown>(&text)?; //.unwrap();
+    //         Ok(json)
+    //     }
+    // } else {
+    //     Err(errors::STError::stapierror(ErrorContent {
+    //         message: String::from("API Error"),
+    //         symbol: String::from(""),
+    //         code: 999,
+    //     }))
+    // }
 }
 
 pub async fn dock_ship(
@@ -250,7 +318,7 @@ pub async fn dock_ship(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipOrbit>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipOrbit>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -275,7 +343,7 @@ pub async fn survey_waypoint(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipSurvey>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipSurvey>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -286,7 +354,7 @@ pub async fn survey_waypoint(
 pub async fn extract_resource(
     config: &config::Config,
     ship_symbol: String,
-) -> Result<message::MessageShipSurveyData, errors::STError> {
+) -> Result<message::MessageShipExtractData, errors::STError> {
     let client = &config.client;
     let mut reqbuilder = client.request(
         reqwest::Method::POST,
@@ -300,7 +368,7 @@ pub async fn extract_resource(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipSurvey>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipExtract>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -330,7 +398,7 @@ pub async fn jettison_cargo(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipJettison>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipJettison>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -359,7 +427,7 @@ pub async fn ship_jump(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipJump>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipJump>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -388,7 +456,7 @@ pub async fn ship_update_nav(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipNav>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipNav>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -417,7 +485,7 @@ pub async fn ship_warp(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipWarp>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipWarp>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -447,7 +515,7 @@ pub async fn sell_cargo(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipSellCargo>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipSellCargo>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -472,7 +540,7 @@ pub async fn scan_systems(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipScanSystems>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipScanSystems>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -497,7 +565,7 @@ pub async fn scan_waypoints(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipScanWaypoints>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipScanWaypoints>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -522,7 +590,7 @@ pub async fn scan_ships(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipScanShips>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipScanShips>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -547,7 +615,7 @@ pub async fn refuel_ship(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipRefuel>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipRefuel>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -577,7 +645,7 @@ pub async fn purchase_cargo(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipPurchaseCargo>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipPurchaseCargo>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -608,7 +676,7 @@ pub async fn transfer_cargo(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageShipTransferCargo>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipTransferCargo>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {

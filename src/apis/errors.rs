@@ -34,6 +34,7 @@ impl fmt::Display for STError {
             STError::serdejerror(_) => write!(f, "This is a serde json error"),
             STError::stapierror(_) => write!(f, "This is a space trader api error"),
             STError::stgeneralerror => write!(f, "this is a space trader api error"),
+            //STError::stderror(_) => write!(f, "this is a space trader standard error"),
         }
     }
 }
@@ -48,6 +49,7 @@ impl error::Error for STError {
             STError::stapierror(_) => None,
             STError::reqwesterror(ref e) => Some(e),
             STError::serdejerror(ref e) => Some(e),
+            //STError::stderror(ref e) => None,
         }
     }
 }

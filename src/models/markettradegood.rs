@@ -43,7 +43,7 @@ pub struct MarketTradeGood {
 
 impl fmt::Display for MarketTradeGood {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut disp = format!(
+        let disp = format!(
             "Symbol: {}\nTrade Volume: {}\nSupply: {:?}\nPurchase Price: {}\nSell Price: {}\n",
             self.symbol, self.tradeVolume, self.supply, self.purchasePrice, self.sellPrice
         );

@@ -25,7 +25,7 @@ pub async fn register(
     let text = resp.text().await?;
     //println!("{:#?}", text);
     //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageAgentRegister>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageAgentRegister>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {

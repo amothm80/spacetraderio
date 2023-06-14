@@ -10,7 +10,6 @@ use apis::ships;
 use apis::systems;
 use std::env;
 use std::fs;
-use std::io;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
@@ -101,6 +100,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
             "cooldown" => println!("{}", ships::get_cooldown(&conf, args[3].to_owned()).await?),
             "dock" => println!("{}", ships::dock_ship(&conf, args[3].to_owned()).await?),
             "refuel" => println!("{}", ships::refuel_ship(&conf, args[3].to_owned()).await?),
+            "extract" => println!(
+                "{}",
+                ships::extract_resource(&conf, args[3].to_owned()).await?
+            ),
             _ => {
                 let ships = ships::get_my_ships(&conf).await?;
                 for ship in ships {

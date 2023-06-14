@@ -19,7 +19,7 @@ pub async fn get_systems(config: &config::Config) -> Result<Vec<system::System>,
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    let json = serde_json::from_str::<message::MessageSystems>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageSystems>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -44,7 +44,7 @@ pub async fn get_system_waypoints(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    let json = serde_json::from_str::<message::MessageWaypoints>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageWaypoints>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -71,7 +71,7 @@ pub async fn get_system_waypoint_info(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    let json = serde_json::from_str::<message::MessageWaypoint>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageWaypoint>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -99,7 +99,7 @@ pub async fn get_waypoint_market(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    let json = serde_json::from_str::<message::MessageMarket>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageMarket>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -128,7 +128,7 @@ pub async fn get_waypoint_shipyard(
     let status = resp.status();
     let text = resp.text().await?;
     //println!("{}", text);
-    let json = serde_json::from_str::<message::MessageShipyard>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageShipyard>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {
@@ -156,7 +156,7 @@ pub async fn get_waypoint_jumpgate(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    let json = serde_json::from_str::<message::MessageJumpgate>(&text).unwrap();
+    let json = serde_json::from_str::<message::MessageJumpgate>(&text)?;
     if !status.is_client_error() && !status.is_server_error() {
         Ok(json.data)
     } else {

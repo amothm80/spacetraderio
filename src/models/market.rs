@@ -72,7 +72,6 @@ impl fmt::Display for Market {
             }
         }
         disp = disp.to_owned() + "\n";
-        count = 1;
 
         if !self.transactions.is_empty() {
             disp = disp.to_owned() + "Transactions:\n";

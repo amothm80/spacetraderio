@@ -32,7 +32,7 @@ pub struct ShipyardTransaction {
 
 impl fmt::Display for ShipyardTransaction {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut disp = format!(
+        let disp = format!(
             "Transaction waypoint: {}\n
             Ship bought: {}\n
             Ship price: {}\n

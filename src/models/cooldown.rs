@@ -33,7 +33,7 @@ impl fmt::Display for Cooldown {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "Cooldown:\nShip Symbol: {}\nTime: {} out of {} remaining\nCooldown Expiration: {}",
+            "Cooldown:\nShip Symbol: {}\nTime: {} seconds out of {} seconds remaining\nCooldown Expiration: {}",
             self.shipSymbol, self.remainingSeconds, self.totalSeconds, self.expiration
         )
     }
