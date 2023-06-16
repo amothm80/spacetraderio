@@ -63,7 +63,7 @@ impl fmt::Display for Contract {
                     .as_str();
                 disp = disp.to_owned() + "\n";
                 if self.fulfilled {
-                    disp = disp.to_owned() + format!("The contract has been fulfilled").as_str();
+                    disp = disp.to_owned() + "The contract has been fulfilled";
                 } else {
                     disp = disp.to_owned()
                         + format!("The contract is set to expire on {}.", self.expiration).as_str();

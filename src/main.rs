@@ -18,7 +18,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let mut conf = Config::new();
     conf.bearer_token = token;
     match process_commands(args, &conf).await {
-        Ok(_) => {}
+        Ok(s) => {
+            println!("{}", s)
+        }
         Err(e) => handle_errors(e),
     }
     //let agent = agent::get_my_agent(conf).await;
@@ -29,9 +31,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 async fn process_commands(
     args: Vec<String>,
     conf: &apis::config::Config,
-) -> Result<(), errors::STError> {
+) -> Result<String, errors::STError> {
     match args[1].as_str() {
-        "register" => println!(
+        "register" => Ok(format!(
             "{}",
             agent::register(
                 conf,
@@ -40,82 +42,90 @@ async fn process_commands(
                 args[4].to_owned()
             )
             .await?
-        ),
-        "agent" => println!("{}", agent::get_my_agent(conf).await?),
+        )),
+        "agent" => Ok(format!("{}", agent::get_my_agent(conf).await?)),
         "faction" => match args[2].as_str() {
             "all" => {
                 let factions = factions::get_factions(conf).await?;
+                let mut disp = String::from("");
                 for faction in factions {
-                    println!("{}\n", faction);
+                    disp = disp.to_owned() + format!("{}\n", faction).as_str();
                 }
+                Ok(disp)
             }
-            _ => println!(
+            _ => Ok(format!(
                 "{}",
                 factions::get_faction_info(conf, args[2].to_owned()).await?
-            ),
+            )),
         },
         "contract" => match args[2].as_str() {
             "all" => {
                 let contracts = contracts::get_my_contracts(conf).await?;
+                let mut disp = String::from("");
                 for contract in contracts {
-                    println!("{}\n", contract);
+                    disp = disp.to_owned() + format!("{}\n", contract).as_str();
                 }
+                Ok(disp)
             }
-            "accept" => {
-                println!(
-                    "{}\nACCEPTED",
-                    contracts::accept_contract(conf, args[3].to_owned()).await?
-                )
-            }
+            "accept" => Ok(format!(
+                "{}\nACCEPTED",
+                contracts::accept_contract(conf, args[3].to_owned()).await?
+            )),
             // match agent::accept_contract(conf, args[3].to_owned()).await {
-            //     Ok(s) => println!("{}\nACCEPTED", s),
+            //     Ok(s) => Ok(format!("{}\nACCEPTED", s),
             //     Err(s) => handle_errors(s),
             // },
-            "fulfill" => {
-                println!(
-                    "{}\nFULILLED",
-                    contracts::fulfill_contract(conf, args[3].to_owned()).await?
-                );
-            }
-            _ => {
-                println!(
-                    "{}",
-                    contracts::get_contract_info(conf, args[2].to_owned()).await?
-                )
-            }
+            "fulfill" => Ok(format!(
+                "{}\nFULILLED",
+                contracts::fulfill_contract(conf, args[3].to_owned()).await?
+            )),
+            _ => Ok(format!(
+                "{}",
+                contracts::get_contract_info(conf, args[2].to_owned()).await?
+            )),
         },
         "ships" => match args[2].as_str() {
-            "buy" => {
-                println!(
-                    "{}\nBOUGHT\n",
-                    ships::buy_ship(conf, args[3].to_owned(), args[4].to_owned()).await?
-                )
-            }
-            "navigate" => println!(
+            "buy" => Ok(format!(
+                "{}\nBOUGHT\n",
+                ships::buy_ship(conf, args[3].to_owned(), args[4].to_owned()).await?
+            )),
+            "navigate" => Ok(format!(
                 "{}\n",
                 ships::navigate_ship(conf, args[3].to_owned(), args[4].to_owned()).await?
-            ),
-            "cargo" => println!(
+            )),
+            "cargo" => Ok(format!(
                 "{}",
                 ships::get_my_ship_cargo(conf, args[3].to_owned()).await?
-            ),
-            "orbit" => println!("{}", ships::orbit_my_ship(conf, args[3].to_owned()).await?),
-            "refine" => println!(
+            )),
+            "orbit" => Ok(format!(
+                "{}",
+                ships::orbit_my_ship(conf, args[3].to_owned()).await?
+            )),
+            "refine" => Ok(format!(
                 "{}",
                 ships::refine_materials(conf, args[3].to_owned(), args[4].to_owned()).await?
-            ),
-            "chart" => println!("{}", ships::chart_waypoint(conf, args[3].to_owned()).await?),
-            "cooldown" => println!("{}", ships::get_cooldown(conf, args[3].to_owned()).await?),
-            "dock" => println!("{}", ships::dock_ship(conf, args[3].to_owned()).await?),
-            "survey" => println!(
+            )),
+            "chart" => Ok(format!(
+                "{}",
+                ships::chart_waypoint(conf, args[3].to_owned()).await?
+            )),
+            "cooldown" => Ok(format!(
+                "{}",
+                ships::get_cooldown(conf, args[3].to_owned()).await?
+            )),
+            "dock" => Ok(format!(
+                "{}",
+                ships::dock_ship(conf, args[3].to_owned()).await?
+            )),
+            "survey" => Ok(format!(
                 "{}",
                 ships::survey_waypoint(conf, args[3].to_owned()).await?
-            ),
-            "extract" => println!(
+            )),
+            "extract" => Ok(format!(
                 "{}",
                 ships::extract_resource(conf, args[3].to_owned()).await?
-            ),
-            "jettison" => println!(
+            )),
+            "jettison" => Ok(format!(
                 "{}",
                 ships::jettison_cargo(
                     conf,
@@ -124,20 +134,20 @@ async fn process_commands(
                     args[5].to_owned()
                 )
                 .await?
-            ),
-            "jump" => println!(
+            )),
+            "jump" => Ok(format!(
                 "{}",
                 ships::ship_jump(conf, args[3].to_owned(), args[4].to_owned()).await?
-            ),
-            "updatenav" => println!(
+            )),
+            "updatenav" => Ok(format!(
                 "{}",
                 ships::ship_update_nav(conf, args[3].to_owned(), args[4].to_owned()).await?
-            ),
-            "warp" => println!(
+            )),
+            "warp" => Ok(format!(
                 "{}",
                 ships::ship_warp(conf, args[3].to_owned(), args[4].to_owned()).await?
-            ),
-            "sell" => println!(
+            )),
+            "sell" => Ok(format!(
                 "{}",
                 ships::sell_cargo(
                     conf,
@@ -146,16 +156,24 @@ async fn process_commands(
                     args[5].to_owned()
                 )
                 .await?
-            ),
-            "scansystems" => println!("{}", ships::scan_systems(conf, args[3].to_owned()).await?),
-            "scanwaypoints" => {
-                println!("{}", ships::scan_waypoints(conf, args[3].to_owned()).await?)
-            }
-            "scanships" => {
-                println!("{}", ships::scan_ships(conf, args[3].to_owned()).await?)
-            }
-            "refuel" => println!("{}", ships::refuel_ship(conf, args[3].to_owned()).await?),
-            "purchase" => println!(
+            )),
+            "scansystems" => Ok(format!(
+                "{}",
+                ships::scan_systems(conf, args[3].to_owned()).await?
+            )),
+            "scanwaypoints" => Ok(format!(
+                "{}",
+                ships::scan_waypoints(conf, args[3].to_owned()).await?
+            )),
+            "scanships" => Ok(format!(
+                "{}",
+                ships::scan_ships(conf, args[3].to_owned()).await?
+            )),
+            "refuel" => Ok(format!(
+                "{}",
+                ships::refuel_ship(conf, args[3].to_owned()).await?
+            )),
+            "purchase" => Ok(format!(
                 "{}",
                 ships::purchase_cargo(
                     conf,
@@ -164,8 +182,8 @@ async fn process_commands(
                     args[5].to_owned()
                 )
                 .await?
-            ),
-            "transfer" => println!(
+            )),
+            "transfer" => Ok(format!(
                 "{}",
                 ships::transfer_cargo(
                     conf,
@@ -175,36 +193,30 @@ async fn process_commands(
                     args[6].to_owned()
                 )
                 .await?
-            ),
+            )),
             _ => {
                 let ships = ships::get_my_ships(conf).await?;
+                let mut disp = String::from("");
                 for ship in ships {
-                    println!("{}\n\n", ship);
+                    disp = disp.to_owned() + format!("{}\n\n", ship).as_str();
                 }
+                Ok(disp)
             }
         },
         "system" => match args[2].as_str() {
             "waypoint" => match args[3].as_str() {
-                "info" => {
-                    println!(
-                        "{}",
-                        systems::get_system_waypoint_info(
-                            conf,
-                            args[4].to_owned(),
-                            args[5].to_owned()
-                        )
+                "info" => Ok(format!(
+                    "{}",
+                    systems::get_system_waypoint_info(conf, args[4].to_owned(), args[5].to_owned())
                         .await?
-                    );
-                }
-                "market" => {
-                    println!(
-                        "{}",
-                        systems::get_waypoint_market(conf, args[4].to_owned(), args[5].to_owned())
-                            .await?
-                    )
-                }
+                )),
+                "market" => Ok(format!(
+                    "{}",
+                    systems::get_waypoint_market(conf, args[4].to_owned(), args[5].to_owned())
+                        .await?
+                )),
                 "shipyard" => {
-                    println!(
+                    Ok(format!(
                         "{}",
                         systems::get_waypoint_shipyard(
                             //cargo run system waypoint shipyard X1-XT43 X1-XT43-27307E
@@ -213,10 +225,10 @@ async fn process_commands(
                             args[5].to_owned()
                         )
                         .await?
-                    );
+                    ))
                 }
                 "jumpgate" => {
-                    println!(
+                    Ok(format!(
                         "{}",
                         systems::get_waypoint_jumpgate(
                             //cargo run system waypoint shipyard X1-XT43 X1-XT43-27307E
@@ -225,26 +237,30 @@ async fn process_commands(
                             args[5].to_owned()
                         )
                         .await?
-                    );
+                    ))
                 }
                 _ => {
                     let waypoints = systems::get_system_waypoints(conf, args[4].to_owned()).await?;
+                    let mut disp = String::from("");
                     for wp in waypoints {
-                        println!("{}", wp);
+                        disp = disp.to_owned() + format!("{}", wp).as_str();
                     }
+                    Ok(disp)
                 }
             },
             _ => {
                 let systems = systems::get_systems(conf).await?;
+                let mut disp = String::from("");
                 for system in systems {
-                    println!("{}\n", system);
+                    disp = disp.to_owned() + format!("{}\n", system).as_str();
                 }
+                Ok(disp)
             }
         },
-        _ => println!("invalid argument"),
+        _ => Ok(String::from("invalid argument")),
     }
 
-    Ok(())
+    // Ok(String::from("invalid argument"))
 }
 
 fn handle_errors(e: errors::STError) {
