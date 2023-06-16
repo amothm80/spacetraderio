@@ -19,11 +19,19 @@ pub async fn get_systems(config: &config::Config) -> Result<Vec<system::System>,
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    let json = serde_json::from_str::<message::MessageSystems>(&text)?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageSystems>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No systems data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -44,11 +52,19 @@ pub async fn get_system_waypoints(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    let json = serde_json::from_str::<message::MessageWaypoints>(&text)?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageWaypoints>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No waypoints data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -71,11 +87,19 @@ pub async fn get_system_waypoint_info(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    let json = serde_json::from_str::<message::MessageWaypoint>(&text)?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageWaypoint>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No waypoint data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -99,11 +123,19 @@ pub async fn get_waypoint_market(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    let json = serde_json::from_str::<message::MessageMarket>(&text)?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageMarket>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No market data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -127,12 +159,19 @@ pub async fn get_waypoint_shipyard(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    //println!("{}", text);
-    let json = serde_json::from_str::<message::MessageShipyard>(&text)?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageShipyard>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No shipyard data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -156,10 +195,18 @@ pub async fn get_waypoint_jumpgate(
     let resp = client.execute(req).await?;
     let status = resp.status();
     let text = resp.text().await?;
-    let json = serde_json::from_str::<message::MessageJumpgate>(&text)?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageJumpgate>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No jumpgate data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }

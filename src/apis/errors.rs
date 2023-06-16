@@ -29,11 +29,11 @@ impl From<SJError> for STError {
 
 impl fmt::Display for STError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            STError::reqwesterror(_) => write!(f, "This is a reqwest error"),
-            STError::serdejerror(_) => write!(f, "This is a serde json error"),
-            STError::stapierror(_) => write!(f, "This is a space trader api error"),
-            STError::stgeneralerror => write!(f, "this is a space trader api error"),
+        match self {
+            STError::reqwesterror(e) => write!(f, "{}", e),
+            STError::serdejerror(e) => write!(f, "{}", e),
+            STError::stapierror(e) => writeln!(f, "{}", e),
+            STError::stgeneralerror => write!(f, "General API Error"),
             //STError::stderror(_) => write!(f, "this is a space trader standard error"),
         }
     }

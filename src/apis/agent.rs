@@ -24,12 +24,19 @@ pub async fn register(
     let status = resp.status();
     let text = resp.text().await?;
     //println!("{:#?}", text);
-    //let json = resp.json::<message::Message>().await?;
-    let json = serde_json::from_str::<message::MessageAgentRegister>(&text)?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageAgentRegister>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No agent registration data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -43,10 +50,19 @@ pub async fn get_my_agent(config: &config::Config) -> Result<agent::Agent, error
     let req = reqbuilder.build()?;
     let resp = client.execute(req).await?;
     let status = resp.status();
-    let json = resp.json::<message::MessageMyAgent>().await?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    let text = resp.text().await?;
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageMyAgent>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No agent data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }

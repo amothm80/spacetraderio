@@ -21,11 +21,20 @@ pub async fn get_factions(
     let req = reqbuilder.build().unwrap();
     let resp = client.execute(req).await.unwrap();
     let status = resp.status();
-    let json = resp.json::<message::MessageFactions>().await?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    let text = resp.text().await?;
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageFactions>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No factions data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -42,10 +51,19 @@ pub async fn get_faction_info(
     let req = reqbuilder.build().unwrap();
     let resp = client.execute(req).await.unwrap();
     let status = resp.status();
-    let json = resp.json::<message::MessageFaction>().await?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    let text = resp.text().await?;
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageFaction>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No faction data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }

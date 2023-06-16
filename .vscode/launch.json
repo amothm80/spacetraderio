@@ -19,7 +19,7 @@
                     "kind": "bin"
                 }
             },
-            "args": ["ships","cooldown","HAMMOUDITH-3-3"],
+            "args": ["system","waypoint","all", "X1-CZ84"],
             "cwd": "${workspaceFolder}"
         },
         {
@@ -38,7 +38,7 @@
                     "kind": "bin"
                 }
             },
-            "args": ["ships","cooldown","HAMMOUDITH-3-3"],
+            "args": ["system","waypoint","all", "X1-CZ84"],
             "cwd": "${workspaceFolder}"
         }
     ]

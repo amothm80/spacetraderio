@@ -15,11 +15,20 @@ pub async fn get_my_contracts(
     let req = reqbuilder.build()?;
     let resp = client.execute(req).await?;
     let status = resp.status();
-    let json = resp.json::<message::MessageMyContracts>().await?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    let text = resp.text().await?;
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageMyContracts>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No contract data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -36,11 +45,20 @@ pub async fn get_contract_info(
     let req = reqbuilder.build()?;
     let resp = client.execute(req).await?;
     let status = resp.status();
-    let json = resp.json::<message::MessageContract>().await?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data)
+    let text = resp.text().await?;
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageContract>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No contract data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -61,43 +79,20 @@ pub async fn accept_contract(
     let req = reqbuilder.build()?;
     let resp = client.execute(req).await?;
     let status = resp.status();
-    let json = resp.json::<message::MessageContractAcceptance>().await?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data.contract)
+    let text = resp.text().await?;
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageContractAcceptance>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data.contract)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
-    }
-}
-
-pub async fn deliver_contract(
-    config: &config::Config,
-    contract: String,
-    ship_symbol: String,
-    trade_symbol: String,
-    units: i64,
-) -> Result<contract::Contract, errors::STError> {
-    let client = &config.client;
-    let mut reqbuilder = client.request(
-        reqwest::Method::POST,
-        config.base_path.to_owned()
-            + "/my/contracts/".to_owned().as_str()
-            + contract.to_owned().as_str()
-            + "/fulfill",
-    );
-    reqbuilder = reqbuilder.bearer_auth(config.bearer_token.to_owned());
-    let payload =
-        format!("{{\"shipSymbol\":\"{ship_symbol}\",\"tradeSymbol\":\"{trade_symbol}\",\"units\":\"{units}\"}}");
-    reqbuilder = reqbuilder.header("Content-length", payload.len());
-    reqbuilder = reqbuilder.header("Content-type", "application/json");
-    reqbuilder = reqbuilder.body(payload);
-    let req = reqbuilder.build()?;
-    let resp = client.execute(req).await?;
-    let status = resp.status();
-    let json = resp.json::<message::MessageContractFulfillment>().await?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data.contract)
-    } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No contract acceptance data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }
 
@@ -118,10 +113,19 @@ pub async fn fulfill_contract(
     let req = reqbuilder.build()?;
     let resp = client.execute(req).await?;
     let status = resp.status();
-    let json = resp.json::<message::MessageContractFulfillment>().await?;
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(json.data.contract)
+    let text = resp.text().await?;
+    if !status.is_server_error() && !text.is_empty() {
+        let json = serde_json::from_str::<message::MessageContractFulfillment>(&text)?;
+        if json.error.code > 0 {
+            Err(errors::STError::stapierror(json.error))
+        } else {
+            Ok(json.data.contract)
+        }
     } else {
-        Err(errors::STError::stapierror(json.error))
+        Err(errors::STError::stapierror(message::ErrorContent {
+            message: String::from("No contract fulfillment data"),
+            symbol: String::from(""),
+            code: 999,
+        }))
     }
 }

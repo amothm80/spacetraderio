@@ -365,7 +365,7 @@ pub struct MessageShipOrbitData {
 
 impl fmt::Display for MessageShipOrbitData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}\n", self.nav)
+        writeln!(f, "{}", self.nav)
     }
 }
 
@@ -891,7 +891,7 @@ impl fmt::Display for ErrorContent {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "Error code: {}, Error message: {}",
+            "Error Code: {}, Error Message: {}",
             self.code, self.message
         )
     }
