@@ -1,4 +1,4 @@
 [workspace]
-members = ["stapi","stui"]
+members = ["stapi","stui","stmain"]
 
 #resolver = "2"
